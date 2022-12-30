@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
+import ReactDOM from 'react-dom/client';
 
 function App() {
 
@@ -13,9 +14,9 @@ function App() {
 
   const [playerData, setPlayerData] = useState({})
 
-  async function searchForPlayer() {
+  async function searchForPlayer(name) {
 
-    var summonerName = "TheKartAgency";
+    var summonerName = name;
     const link = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + summonerName + "?api_key=" + API_KEY;
 
     //Gets info from API
@@ -27,36 +28,41 @@ function App() {
     })
   }
 
-  //Continues checking API as long as object doesn't have any info
-  if (Object.keys(playerData).length === 0) {
-    searchForPlayer()
-  }
-
   var id = playerData.id
   var name = playerData.name
 
-  return (
-    
-    <div className="App">
-      <div className="content">
-        <h1>Best Champion Finder!</h1>
-    
-        <Box
+  
+
+  
+
+  function MyForm() {
+    const [name, setName] = useState("");
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      //Continues checking API as long as object doesn't have any info
+      if (Object.keys(playerData).length === 0) {
+        searchForPlayer(name)
+      }
+    }
+  
+    return (
+      <Box 
           component="form"
           sx={{
             position: "relative",
           }}
           noValidate
           autoComplete="off"
+          onSubmit={handleSubmit}
         > 
-          <Box
-          >
-            <TextField id="outlined-basic" label="Summoner Name" variant="standard"
+          <Box>
+            <TextField id="outlined-basic" label="Summoner Name" variant="standard" type="text" value={name} onChange={(e) => setName(e.target.value)}
               sx={{
                 width: "50%"
               }}
             />
-            <IconButton color="primary" aria-label="upload picture" component="label"
+            <IconButton color="primary" aria-label="upload picture" component="label" onClick={handleSubmit}
               sx={{
                 m: 0, 
                 position: "absolute",
@@ -67,9 +73,21 @@ function App() {
             >
               <SearchIcon></SearchIcon>            
             </IconButton>
+
+            
           </Box>
         </Box>
-
+    )
+  }
+  
+  return (
+    
+    <div className="App">
+      <div className="content">
+        <h1>Best Champion Finder!</h1>
+    
+        
+        <MyForm />
         
         
         
