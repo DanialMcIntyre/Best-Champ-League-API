@@ -6,40 +6,41 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import ReactDOM from 'react-dom/client';
 
 function App() {
 
   const API_KEY = "RGAPI-26c24b2e-0397-46bb-9474-d9d744090b0c"
 
-  const [playerData, setPlayerData] = useState({})
+  var [playerData, setPlayerData] = useState({})
 
+  //Gets player data from API
   async function searchForPlayer(name) {
-
-    var summonerName = name;
-    const link = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + summonerName + "?api_key=" + API_KEY;
+    const link = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + name + "?api_key=" + API_KEY;
 
     //Gets info from API
     axios.get(link).then(function (response) {
       setPlayerData(response.data)
-      console.log(playerData)
     }).catch(function (error) {
       console.log(error);
     })
   }
 
-  var id = playerData.id
-  var name = playerData.name
-
-  
-
-  
+  //Puts info into variables
+  var playerID = playerData.id
+  var playerPUUID = playerData.puuid
+  var playerName = playerData.name
+  console.log(playerData)
 
   function MyForm() {
     const [name, setName] = useState("");
   
+    //When form is submitted
     const handleSubmit = (event) => {
       event.preventDefault();
+
+      //Reset player data
+      playerData = {}
+      
       //Continues checking API as long as object doesn't have any info
       if (Object.keys(playerData).length === 0) {
         searchForPlayer(name)
@@ -85,14 +86,12 @@ function App() {
     <div className="App">
       <div className="content">
         <h1>Best Champion Finder!</h1>
-    
-        
+            
         <MyForm />
-        
-        
-        
-        <p>{id}</p>
-        <p>{name}</p>
+     
+        <p>Player ID: {playerID}</p>
+        <p>Player Puuid: {playerPUUID}</p>
+        <p>Player Name: {playerName}</p>
       </div>
     </div>
   );
