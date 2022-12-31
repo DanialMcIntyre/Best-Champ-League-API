@@ -30,14 +30,31 @@ function App() {
 
   //Gets match history of player from API
   async function searchForMatches(puuid) {
-    const link = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=100&api_key=" + API_KEY;
+    const link = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=5&api_key=" + API_KEY;
 
     //Gets info from API
     axios.get(link).then(function (response) {
       setMatchHistoryData(response.data)
+      matchHistoryData = Object.values(matchHistoryData);
     }).catch(function (error) {
       console.log(error);
     })
+  }
+
+  //Gets specific information from each match
+  async function matchHistoryInfo(matches) {
+
+    for(var i = 0; i < Object.keys(matches).length; i++) {
+
+      const link = "https://americas.api.riotgames.com/lol/match/v5/matches/" + matches[i] + "?api_key=" + API_KEY;
+
+      //Gets info from API
+      axios.get(link).then(function (response) {
+        console.log(response.data)
+      }).catch(function (error) {
+        console.log(error);
+      })
+    }
   }
 
   //Puts info into variables
@@ -45,9 +62,7 @@ function App() {
   var playerPUUID = playerData.puuid
   var playerName = playerData.name
 
-  var matches = Object.values(matchHistoryData);
-  
-  console.log(matches)
+  matchHistoryInfo(matchHistoryData)
 
   function MyForm() {
     const [name, setName] = useState("");
@@ -111,7 +126,6 @@ function App() {
         <p>Player ID: {playerID}</p>
         <p>Player Puuid: {playerPUUID}</p>
         <p>Player Name: {playerName}</p>
-        <p>{matches}</p>
       </div>
     </div>
   );
