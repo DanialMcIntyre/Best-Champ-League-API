@@ -12,6 +12,7 @@ function App() {
   const API_KEY = "RGAPI-26c24b2e-0397-46bb-9474-d9d744090b0c"
 
   var [playerData, setPlayerData] = useState({})
+  var [matchHistoryData, setMatchHistoryData] = useState({})
 
   //Gets player data from API
   async function searchForPlayer(name) {
@@ -20,6 +21,20 @@ function App() {
     //Gets info from API
     axios.get(link).then(function (response) {
       setPlayerData(response.data)
+      //When gets player data, also get match history
+      searchForMatches(response.data.puuid)
+    }).catch(function (error) {
+      console.log(error);
+    })
+  }
+
+  //Gets match history of player from API
+  async function searchForMatches(puuid) {
+    const link = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=100&api_key=" + API_KEY;
+
+    //Gets info from API
+    axios.get(link).then(function (response) {
+      setMatchHistoryData(response.data)
     }).catch(function (error) {
       console.log(error);
     })
@@ -29,7 +44,10 @@ function App() {
   var playerID = playerData.id
   var playerPUUID = playerData.puuid
   var playerName = playerData.name
-  console.log(playerData)
+
+  var matches = Object.values(matchHistoryData);
+  
+  console.log(matches)
 
   function MyForm() {
     const [name, setName] = useState("");
@@ -45,6 +63,7 @@ function App() {
       if (Object.keys(playerData).length === 0) {
         searchForPlayer(name)
       }
+
     }
   
     return (
@@ -92,6 +111,7 @@ function App() {
         <p>Player ID: {playerID}</p>
         <p>Player Puuid: {playerPUUID}</p>
         <p>Player Name: {playerName}</p>
+        <p>{matches}</p>
       </div>
     </div>
   );
