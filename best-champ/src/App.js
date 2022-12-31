@@ -16,7 +16,7 @@ function App() {
 
   //Gets player data from API
   async function searchForPlayer(name) {
-    const link = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + name + "?api_key=" + API_KEY;
+    const link = "https://cors-anywhere.herokuapp.com/https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + name + "?api_key=" + API_KEY;
 
     //Gets info from API
     axios.get(link).then(function (response) {
@@ -30,7 +30,7 @@ function App() {
 
   //Gets match history of player from API
   async function searchForMatches(puuid) {
-    const link = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=5&api_key=" + API_KEY;
+    const link = "https://cors-anywhere.herokuapp.com/https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=5&api_key=" + API_KEY;
 
     //Gets info from API
     axios.get(link).then(function (response) {
@@ -46,7 +46,7 @@ function App() {
 
     for(var i = 0; i < Object.keys(matches).length; i++) {
 
-      const link = "https://americas.api.riotgames.com/lol/match/v5/matches/" + matches[i] + "?api_key=" + API_KEY;
+      const link = "https://cors-anywhere.herokuapp.com/https://americas.api.riotgames.com/lol/match/v5/matches/" + matches[i] + "?api_key=" + API_KEY;
 
       //Gets info from API
       axios.get(link).then(function (response) {
