@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function App() {
 
-  const API_KEY = "RGAPI-26c24b2e-0397-46bb-9474-d9d744090b0c"
+  const API_KEY = "RGAPI-9923b3dc-e8f1-4d78-939b-d201d8966551"
 
   var [playerData, setPlayerData] = useState({})
   var [matchHistoryData, setMatchHistoryData] = useState({})
@@ -42,19 +42,24 @@ function App() {
   }
 
   //Gets specific information from each match
-  async function matchHistoryInfo(matches) {
+  async function matchHistoryList(matches) {
 
-    for(var i = 0; i < Object.keys(matches).length; i++) {
+    //Makes empty array for all the matches
+    var matchList = new Array(Object.keys(matches).length)
+
+    //Loops through all the matches and gets necessary info
+    for(let i = 0; i < Object.keys(matches).length; i++) {
 
       const link = "https://cors-anywhere.herokuapp.com/https://americas.api.riotgames.com/lol/match/v5/matches/" + matches[i] + "?api_key=" + API_KEY;
 
       //Gets info from API
       axios.get(link).then(function (response) {
-        console.log(response.data)
+        matchList.splice(i, 0, response.data)
       }).catch(function (error) {
         console.log(error);
       })
     }
+    return matchList
   }
 
   //Puts info into variables
@@ -62,7 +67,9 @@ function App() {
   var playerPUUID = playerData.puuid
   var playerName = playerData.name
 
-  matchHistoryInfo(matchHistoryData)
+  var matchList = matchHistoryList(matchHistoryData)
+  
+  console.log(matchList)
 
   function MyForm() {
     const [name, setName] = useState("");
