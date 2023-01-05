@@ -9,14 +9,14 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function App() {
 
-  const API_KEY = "RGAPI-9923b3dc-e8f1-4d78-939b-d201d8966551"
+  const API_KEY = "RGAPI-23007888-47d6-4389-96c0-7b19e30e2202"
 
   var [playerData, setPlayerData] = useState({})
   var [matchHistoryData, setMatchHistoryData] = useState({})
 
   //Gets player data from API
   async function searchForPlayer(name) {
-    const link = "https://cors-anywhere.herokuapp.com/https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + name + "?api_key=" + API_KEY;
+    const link = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + name + "?api_key=" + API_KEY;
 
     //Gets info from API
     axios.get(link).then(function (response) {
@@ -30,7 +30,7 @@ function App() {
 
   //Gets match history of player from API
   async function searchForMatches(puuid) {
-    const link = "https://cors-anywhere.herokuapp.com/https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=5&api_key=" + API_KEY;
+    const link = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=5&api_key=" + API_KEY;
 
     //Gets info from API
     axios.get(link).then(function (response) {
@@ -50,7 +50,7 @@ function App() {
     //Loops through all the matches and gets necessary info
     for(let i = 0; i < Object.keys(matches).length; i++) {
 
-      const link = "https://cors-anywhere.herokuapp.com/https://americas.api.riotgames.com/lol/match/v5/matches/" + matches[i] + "?api_key=" + API_KEY;
+      const link = "https://americas.api.riotgames.com/lol/match/v5/matches/" + matches[i] + "?api_key=" + API_KEY;
 
       //Gets info from API
       axios.get(link).then(function (response) {
@@ -121,6 +121,20 @@ function App() {
         </Box>
     )
   }
+
+  function Analytics() {
+    return (
+      <Box 
+        sx={{
+          positon: "relative"
+        }}
+        >
+        <img src="https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/blt0d029ccdb18a4299/5db0601ba6470d6ab91ce5be/RiotX_ChampionList_xayah.jpg?quality=90&width=250" alt="Your best champion"/>
+                      
+      </Box>
+      
+    ) 
+  }
   
   return (
     
@@ -129,10 +143,11 @@ function App() {
         <h1>Best Champion Finder!</h1>
             
         <MyForm />
-     
+        <Analytics />
         <p>Player ID: {playerID}</p>
         <p>Player Puuid: {playerPUUID}</p>
         <p>Player Name: {playerName}</p>
+        
       </div>
     </div>
   );
