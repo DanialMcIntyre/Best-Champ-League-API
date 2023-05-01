@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function App() {
 
-  const API_KEY = "RGAPI-23007888-47d6-4389-96c0-7b19e30e2202"
+  const API_KEY = "RGAPI-e0d6a1d1-5340-4b84-bab1-e7a3fe159e5b"
 
   var [playerData, setPlayerData] = useState({})
   var [matchHistoryData, setMatchHistoryData] = useState({})
@@ -41,25 +41,24 @@ function App() {
     })
   }
 
-  //Gets specific information from each match
-  async function matchHistoryList(matches) {
+  //Gets specific match information at certain index, returns JSON
+  async function getSpecificMatch(matches, index) {
 
-    //Makes empty array for all the matches
-    var matchList = new Array(Object.keys(matches).length)
+    const link = "https://americas.api.riotgames.com/lol/match/v5/matches/" + matches[index] + "?api_key=" + API_KEY;
+    axios.get(link).then(function (response) {
+      let matchInfo = JSON.stringify(response.data);
+      getSpecificMatchData(matchInfo);
+      return matchInfo;
+    }).catch(function (error) {
+      console.log(error);
+    })
+  }
 
-    //Loops through all the matches and gets necessary info
-    for(let i = 0; i < Object.keys(matches).length; i++) {
+  async function getSpecificMatchData(match) {
+    var data = JSON.parse(match);
 
-      const link = "https://americas.api.riotgames.com/lol/match/v5/matches/" + matches[i] + "?api_key=" + API_KEY;
-
-      //Gets info from API
-      axios.get(link).then(function (response) {
-        matchList.splice(i, 0, response.data)
-      }).catch(function (error) {
-        console.log(error);
-      })
-    }
-    return matchList
+    let participants = data.metadata.participants;
+    console.log(participants);
   }
 
   //Puts info into variables
@@ -67,9 +66,8 @@ function App() {
   var playerPUUID = playerData.puuid
   var playerName = playerData.name
 
-  var matchList = matchHistoryList(matchHistoryData)
+  getSpecificMatch(matchHistoryData, 1);
   
-  console.log(matchList)
 
   function MyForm() {
     const [name, setName] = useState("");
