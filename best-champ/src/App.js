@@ -55,10 +55,30 @@ function App() {
   }
 
   async function getSpecificMatchData(match) {
+    //Puts match info in variable
     var data = JSON.parse(match);
 
     let participants = data.metadata.participants;
-    console.log(participants);
+    let yourPlayerIndex = 0;
+
+    //Gets all info for player
+    for (let i = 0; i < participants.length; i++) {
+      if (participants[i] === playerData.puuid) {
+        yourPlayerIndex = i;
+      }
+    }
+    let yourPlayer = data.info.participants[yourPlayerIndex];
+
+    let champion = yourPlayer.championName;
+    let lane = yourPlayer.lane;
+    let kills = yourPlayer.kills;
+    let deaths = yourPlayer.deaths;
+    let assists = yourPlayer.assists;
+
+    console.log(yourPlayer);
+    console.log("You played " + champion);
+    console.log("Your lane was " + lane);
+    console.log("You had a kda of " + kills + "/" + deaths + "/" + assists);
   }
 
   //Puts info into variables
