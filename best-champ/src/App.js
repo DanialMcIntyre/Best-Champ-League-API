@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function App() {
 
-  const API_KEY = "RGAPI-e0d6a1d1-5340-4b84-bab1-e7a3fe159e5b"
+  const API_KEY = "RGAPI-5a661454-d029-4bed-8a92-61de0b11c8e6"
 
   var [playerData, setPlayerData] = useState({})
   var [matchHistoryData, setMatchHistoryData] = useState({})
@@ -74,7 +74,6 @@ function App() {
     let kills = yourPlayer.kills;
     let deaths = yourPlayer.deaths;
     let assists = yourPlayer.assists;
-
     console.log(yourPlayer);
     console.log("You played " + champion);
     console.log("Your lane was " + lane);
@@ -85,9 +84,10 @@ function App() {
   var playerID = playerData.id
   var playerPUUID = playerData.puuid
   var playerName = playerData.name
-
-  getSpecificMatch(matchHistoryData, 1);
+  let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/"
+  imgString = imgString + "Aatrox" + "_0.jpg"
   
+  getSpecificMatch(matchHistoryData, 0);
 
   function MyForm() {
     const [name, setName] = useState("");
@@ -139,20 +139,6 @@ function App() {
         </Box>
     )
   }
-
-  function Analytics() {
-    return (
-      <Box 
-        sx={{
-          positon: "relative"
-        }}
-        >
-        <img src="https://images.contentstack.io/v3/assets/blt731acb42bb3d1659/blt0d029ccdb18a4299/5db0601ba6470d6ab91ce5be/RiotX_ChampionList_xayah.jpg?quality=90&width=250" alt="Your best champion"/>
-                      
-      </Box>
-      
-    ) 
-  }
   
   return (
     
@@ -161,7 +147,7 @@ function App() {
         <h1>Best Champion Finder!</h1>
             
         <MyForm />
-        <Analytics />
+        <img src={imgString} alt="Your best champion" id="champImg"/>
         <p>Player ID: {playerID}</p>
         <p>Player Puuid: {playerPUUID}</p>
         <p>Player Name: {playerName}</p>
