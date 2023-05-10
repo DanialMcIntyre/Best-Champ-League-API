@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function App() {
 
-  const API_KEY = "RGAPI-5a661454-d029-4bed-8a92-61de0b11c8e6"
+  const API_KEY = "RGAPI-ac04f812-87a1-45c2-9764-f466e1d3c3b8"
 
   var [playerData, setPlayerData] = useState({})
   var [matchHistoryData, setMatchHistoryData] = useState({})
@@ -40,24 +40,26 @@ function App() {
       console.log(error);
     })
   }
-
+  //
   //Gets specific match information at certain index, returns JSON
-  async function getSpecificMatch(matches, index) {
-
-    const link = "https://americas.api.riotgames.com/lol/match/v5/matches/" + matches[index] + "?api_key=" + API_KEY;
-    axios.get(link).then(function (response) {
-      let matchInfo = JSON.stringify(response.data);
-      getSpecificMatchData(matchInfo);
-      return matchInfo;
-    }).catch(function (error) {
-      console.log(error);
+  function getSpecificMatch(matches, index) {
+    return new Promise((resolve, reject) => {
+      const link = "https://americas.api.riotgames.com/lol/match/v5/matches/" + matches[index] + "?api_key=" + API_KEY;
+      axios.get(link).then(function (response) {
+        let matchInfo = JSON.stringify(response.data);
+          let result = getSpecificMatchData(matchInfo);
+          setTimeout(() => {
+            resolve(result)
+            }, 1000)
+      }).catch(function (error) {
+        console.log(error);
+      })
     })
   }
 
-  async function getSpecificMatchData(match) {
+  function getSpecificMatchData(match) {
     //Puts match info in variable
     var data = JSON.parse(match);
-
     let participants = data.metadata.participants;
     let yourPlayerIndex = 0;
 
@@ -69,16 +71,24 @@ function App() {
     }
     let yourPlayer = data.info.participants[yourPlayerIndex];
 
-    let champion = yourPlayer.championName;
-    let lane = yourPlayer.lane;
-    let kills = yourPlayer.kills;
-    let deaths = yourPlayer.deaths;
-    let assists = yourPlayer.assists;
-    console.log(yourPlayer);
-    console.log("You played " + champion);
-    console.log("Your lane was " + lane);
-    console.log("You had a kda of " + kills + "/" + deaths + "/" + assists);
+    let matchchampion = yourPlayer.championName;
+    let matchlane = yourPlayer.lane;
+    let matchkills = yourPlayer.kills;
+    let matchdeaths = yourPlayer.deaths;
+    let matchassists = yourPlayer.assists;
+    let thismatch = {champion : matchchampion, lane : matchlane, kills : matchkills, deaths : matchdeaths, assists : matchassists}
+    return thismatch
   }
+  
+  async function receiveData() {
+      const match1 = await getSpecificMatch(matchHistoryData, 0);
+      let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/"
+      imgString = imgString + match1.champion + "_0.jpg"
+      document.getElementById("champImg").setAttribute("src", imgString)
+      return match1.champion
+  }
+
+  receiveData();
 
   //Puts info into variables
   var playerID = playerData.id
@@ -87,8 +97,6 @@ function App() {
   let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/"
   imgString = imgString + "Aatrox" + "_0.jpg"
   
-  getSpecificMatch(matchHistoryData, 0);
-
   function MyForm() {
     const [name, setName] = useState("");
   
