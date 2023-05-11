@@ -82,7 +82,7 @@ function App() {
   
   async function receiveData() {
       const match1 = await getSpecificMatch(matchHistoryData, 0);
-      let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/"
+      let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/"
       imgString = imgString + match1.champion + "_0.jpg"
       document.getElementById("champImg").setAttribute("src", imgString)
       return match1.champion
@@ -94,8 +94,8 @@ function App() {
   var playerID = playerData.id
   var playerPUUID = playerData.puuid
   var playerName = playerData.name
-  let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/"
-  imgString = imgString + "Aatrox" + "_0.jpg"
+  let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/"
+  imgString = imgString + "Aatrox_0.jpg"
   
   function MyForm() {
     const [name, setName] = useState("");
@@ -155,10 +155,14 @@ function App() {
         <h1>Best Champion Finder!</h1>
             
         <MyForm />
-        <img src={imgString} alt="Your best champion" id="champImg"/>
-        <p>Player ID: {playerID}</p>
-        <p>Player Puuid: {playerPUUID}</p>
-        <p>Player Name: {playerName}</p>
+        <div class="flex-container">
+            <img src={imgString} alt="Your best champion" id="champImg" display="inline"/>
+            <div justify="left" border="1px solid black">
+              <p>Player ID: {playerID}</p>
+              <p>Player Puuid: {playerPUUID}</p>
+              <p>Player Name: {playerName}</p>
+            </div>
+        </div>
         
       </div>
     </div>
