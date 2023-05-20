@@ -40,6 +40,18 @@
 .flex-container {
   display: flex;
   justify-content: center;
+  width: 100%;
+}
+
+.child1 {
+  display: flex;
+  justify-content: center;
+  width: 20%;
+}
+
+.child2 {
+  display: flex;
+  justify-content: center;
   width: 80%;
-  padding: 30px;
+  flex-direction: column;
 }

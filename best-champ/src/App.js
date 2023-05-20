@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function App() {
 
-  const API_KEY = "RGAPI-ac04f812-87a1-45c2-9764-f466e1d3c3b8"
+  const API_KEY = "RGAPI-120b2925-70da-4712-adb6-65ac65adb4b0"
 
   var [playerData, setPlayerData] = useState({})
   var [matchHistoryData, setMatchHistoryData] = useState({})
@@ -30,7 +30,7 @@ function App() {
 
   //Gets match history of player from API
   async function searchForMatches(puuid) {
-    const link = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=5&api_key=" + API_KEY;
+    const link = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=100&api_key=" + API_KEY;
 
     //Gets info from API
     axios.get(link).then(function (response) {
@@ -50,7 +50,7 @@ function App() {
           let result = getSpecificMatchData(matchInfo);
           setTimeout(() => {
             resolve(result)
-            }, 1000)
+            }, 1)
       }).catch(function (error) {
         console.log(error);
       })
@@ -80,16 +80,23 @@ function App() {
     return thismatch
   }
   
+  async function getAllMatches() {
+    const matchArr = [];
+    for(let i = 0; i < 20; i++) {
+      matchArr.push(await getSpecificMatch(matchHistoryData, i));
+    }
+    return matchArr
+  }
   async function receiveData() {
-      const match1 = await getSpecificMatch(matchHistoryData, 0);
-      let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/"
-      imgString = imgString + match1.champion + "_0.jpg"
-      document.getElementById("champImg").setAttribute("src", imgString)
-      return match1.champion
+      const matches = await getAllMatches();
+      console.log(matches)
+      //let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/"
+      //imgString = imgString + match1.champion + "_0.jpg"
+      //document.getElementById("champImg").setAttribute("src", imgString)
+      return //match1.champion
   }
 
   receiveData();
-
   //Puts info into variables
   var playerID = playerData.id
   var playerPUUID = playerData.puuid
@@ -147,6 +154,23 @@ function App() {
         </Box>
     )
   }
+
+  function Analytics() {
+
+    return (
+      <div class="flex-container">
+        <div class="child1"> 
+          <img src={imgString} alt="Your best champion" id="champImg" display="inline"/>
+        </div>
+        
+        <div class="child2">
+          <p display="block">Player ID: {playerID}</p>
+          <p display="block">Player Puuid: {playerPUUID}</p>
+          <p display="block">Player Name: {playerName}</p>
+        </div>
+      </div>
+    )
+  }
   
   return (
     
@@ -155,14 +179,8 @@ function App() {
         <h1>Best Champion Finder!</h1>
             
         <MyForm />
-        <div class="flex-container">
-            <img src={imgString} alt="Your best champion" id="champImg" display="inline"/>
-            <div justify="left" border="1px solid black">
-              <p>Player ID: {playerID}</p>
-              <p>Player Puuid: {playerPUUID}</p>
-              <p>Player Name: {playerName}</p>
-            </div>
-        </div>
+        <Analytics />
+        
         
       </div>
     </div>
