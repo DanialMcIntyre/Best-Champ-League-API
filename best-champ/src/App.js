@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function App() {
 
-  const API_KEY = "RGAPI-120b2925-70da-4712-adb6-65ac65adb4b0"
+  const API_KEY = "RGAPI-79c63bc8-e177-43bd-8f3f-ed32f47565c0"
 
   var [playerData, setPlayerData] = useState({})
   var [matchHistoryData, setMatchHistoryData] = useState({})
@@ -103,6 +103,7 @@ function App() {
   var playerName = playerData.name
   let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/"
   imgString = imgString + "Aatrox_0.jpg"
+  var bestChamp = "Thresh"
   
   function MyForm() {
     const [name, setName] = useState("");
@@ -131,23 +132,24 @@ function App() {
           autoComplete="off"
           onSubmit={handleSubmit}
         > 
-          <Box>
+          <Box class="searchbox-container">
+            <Box class="searchbox-spacer"></Box>
             <TextField id="outlined-basic" label="Summoner Name" variant="standard" type="text" value={name} onChange={(e) => setName(e.target.value)}
               sx={{
-                width: "50%"
+                width: "85%",
+                height: "10%"
               }}
             />
             <IconButton color="primary" aria-label="upload picture" component="label" onClick={handleSubmit}
               sx={{
-                m: 0, 
-                position: "absolute",
-                top: "50%", 
-                msTransform: "translateY(-50%)", 
-                transform: "translateY(-50%)",
+                width: "5%",
+                height: "10%"
               }}
+            
             >
               <SearchIcon></SearchIcon>            
             </IconButton>
+            <Box class="searchbox-spacer"></Box>
 
             
           </Box>
@@ -159,15 +161,22 @@ function App() {
 
     return (
       <div class="flex-container">
+        <div class="spacer"></div>
         <div class="child1"> 
-          <img src={imgString} alt="Your best champion" id="champImg" display="inline"/>
+          <MyForm/>
+          <p display="block" class="analytics">{playerName}</p> 
+          <img width="100%" src={imgString} alt="Your best champion" id="champImg" display="inline"/>
         </div>
-        
+        <div id="midspacer"></div>
         <div class="child2">
-          <p display="block">Player ID: {playerID}</p>
-          <p display="block">Player Puuid: {playerPUUID}</p>
-          <p display="block">Player Name: {playerName}</p>
+          <h1 id="title">Your Best Champ is: {bestChamp} </h1>
+          <div class="analytics"> 
+            <p display="block" class="analytics">Player ID: {playerID}</p>
+            <p display="block" class="analytics">Player Puuid: {playerPUUID}</p>
+            
+          </div>
         </div>
+        <div class="spacer"></div>
       </div>
     )
   }
@@ -178,7 +187,8 @@ function App() {
       <div className="content">
         <h1>Best Champion Finder!</h1>
             
-        <MyForm />
+        
+        <br />
         <Analytics />
         
         
