@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function App() {
 
-  const API_KEY = "RGAPI-79c63bc8-e177-43bd-8f3f-ed32f47565c0"
+  const API_KEY = "RGAPI-7a1c1f69-0dcc-475c-b03f-7f3ec2172bf0"
 
   var [playerData, setPlayerData] = useState({})
   var [matchHistoryData, setMatchHistoryData] = useState({})
@@ -82,28 +82,35 @@ function App() {
   
   async function getAllMatches() {
     const matchArr = [];
-    for(let i = 0; i < 20; i++) {
+    for(let i = 0; i < 5; i++) {
       matchArr.push(await getSpecificMatch(matchHistoryData, i));
     }
     return matchArr
   }
-  async function receiveData() {
+  async function receiveData(playerData) {
       const matches = await getAllMatches();
       console.log(matches)
-      //let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/"
-      //imgString = imgString + match1.champion + "_0.jpg"
-      //document.getElementById("champImg").setAttribute("src", imgString)
-      return //match1.champion
+      let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/"
+      imgString = imgString + matches[0].champion + "_0.jpg"
+      document.getElementById("champImg").setAttribute("src", imgString)
+
+      let bestChamp = matches[0].champion
+      document.getElementById("title").innerHTML = "Your Best Champ is: " + bestChamp
+
+      let playerIcon = "http://ddragon.leagueoflegends.com/cdn/13.11.1/img/profileicon/"+playerData.profileIconId+".png"
+      console.log(playerIcon)
+      document.getElementById("iconImg").setAttribute("src", playerIcon)
+      return
   }
 
-  receiveData();
+  receiveData(playerData);
   //Puts info into variables
   var playerID = playerData.id
   var playerPUUID = playerData.puuid
   var playerName = playerData.name
-  let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/"
-  imgString = imgString + "Aatrox_0.jpg"
-  var bestChamp = "Thresh"
+  let iconString = "http://ddragon.leagueoflegends.com/cdn/13.11.1/img/profileicon/0.png"
+  let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Aatrox_0.jpg"
+  var bestChamp = "Aatrox"
   
   function MyForm() {
     const [name, setName] = useState("");
@@ -164,7 +171,10 @@ function App() {
         <div class="spacer"></div>
         <div class="child1"> 
           <MyForm/>
-          <p display="block" class="analytics">{playerName}</p> 
+          <div class="flex-playerinfo"> 
+            <img src={iconString} alt="Your icon" id="iconImg" display="flex" />
+            <p display="flex" id="playername">{playerName}</p> 
+          </div>
           <img width="100%" src={imgString} alt="Your best champion" id="champImg" display="inline"/>
         </div>
         <div id="midspacer"></div>
