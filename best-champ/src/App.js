@@ -19,6 +19,7 @@ function App() {
   function onButtonClick(event) {
     getPlayerData()
     getMatchData()
+    getPlayerDataFromMatches();
   }
 
   //Finds player data
@@ -32,14 +33,30 @@ function App() {
   }
 
   //Gets match details of past games
-  function getMatchData() {
+  async function getMatchData() {
     axios.get("http://localhost:4000/matchHistory", { params: {username: searchText}})
       .then(function (response) {
         setMatchData(response.data);
       }).catch(function (error) {
         console.log(error);
       })
+  }
+
+  function getPlayerDataFromMatches() {
+    console.log(matchData);
+    const numOfMatches = matchData.length;
+    const puuid = playerData.puuid;
+    let playerNumber = 0;
+    for (let i = 0; i < numOfMatches; i++) {
+      for (let n = 0; n < 10; n++) {
+        console.log(matchData[i].metadata.participants[n])
+        if (matchData[i].metadata.participants[n] === puuid) {
+          playerNumber = n;
+        }
+      }
     }
+    console.log(playerNumber)
+  }
 
   useEffect(() => {
     console.log(playerData);
@@ -103,7 +120,13 @@ function App() {
             <button onClick = {e => onButtonClick(e)}>Search for player</button>
 
             <div>
-              {JSON.stringify(playerData) !== '{}' ?
+              {
+              JSON.stringify(playerData.status) === "404" ?
+              <>
+              <p>Please enter a valid username!</p>
+              </>
+              :
+              JSON.stringify(playerData) !== '{}' ?
               <Analytics/>
               :
               <><p>No player data</p></>}
