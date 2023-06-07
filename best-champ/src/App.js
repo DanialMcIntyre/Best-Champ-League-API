@@ -3,6 +3,7 @@ import {useState} from 'react'
 import axios from 'axios';
 import * as React from 'react';
 import { useEffect } from 'react';
+import background from "./images/background.jpg";
 
 function App() {
 
@@ -58,6 +59,12 @@ function App() {
   let iconString = "http://ddragon.leagueoflegends.com/cdn/13.11.1/img/profileicon/" + iconID + ".png"
   let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/" + bestChamp + "_" + skinNumber + ".jpg"
 
+  function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      onButtonClick(event);
+    }
+  }
+
   function Analytics() {
 
     return (
@@ -85,15 +92,26 @@ function App() {
   }
   
   return (
-    
-    <div className="App">
-      <div className="content">
-        <h1>Best Champion Finder!</h1>
-        <input type="text" onChange = {e => setSearchText(e.target.value)}/>
-        <button onClick = {e => onButtonClick(e)}>Search for player</button>
-        <Analytics/>
-        <br />
-        
+    <div style={{ backgroundImage: `url(${background})` }}>
+      <div className="App">
+        <div className="content">
+          <div className = "font-face-league">
+            <div className = "title">
+              <h1>Best Champion Finder!</h1>
+            </div>
+            <input type="text" onChange = {e => setSearchText(e.target.value)} onKeyDown = {e => handleKeyDown(e)}/>
+            <button onClick = {e => onButtonClick(e)}>Search for player</button>
+
+            <div>
+              {JSON.stringify(playerData) !== '{}' ?
+              <Analytics/>
+              :
+              <><p>No player data</p></>}
+            </div>
+            
+            <br />
+          </div>
+        </div>
       </div>
     </div>
   );

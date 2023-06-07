@@ -1,54 +1,7 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.searchbox-container {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  flex-direction: row;
-}
-
-.searchbox-spacer {
-  display: flex;
-  justify-content: center;
-  width: 5%;
-  flex-direction: row;
+  text-align: center;
+  height: 100vh;
 }
 
 .flex-container {
@@ -75,14 +28,12 @@
   display: flex;
   width: 9%;
   flex-direction: column;
-  background-color: #61dafb;
 }
 
 #midspacer {
   display: flex;
   width: 2%;
   flex-direction: column;
-  background-color: #61dafb;
 }
 
 .analytics {
@@ -109,4 +60,17 @@
   width: 100%;
   margin-top: 5%;
   margin-bottom: 5%;
+}
+
+
+.font-face-league {
+  font-family: "FrizQuadrataRegular";
+}
+
+.title {
+  font-size: 2em;
+}
+
+* {
+  margin-top: 0;
 }
