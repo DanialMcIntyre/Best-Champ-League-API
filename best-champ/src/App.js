@@ -49,17 +49,22 @@ function App() {
   var playerID = playerData.id
   var playerPUUID = playerData.puuid
   var playerName = playerData.name
-  let iconString = "http://ddragon.leagueoflegends.com/cdn/13.11.1/img/profileicon/0.png"
-  let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/Aatrox_0.jpg"
-  var bestChamp = "Aatrox"
+  let iconID = playerData.profileIconId;
+  if (iconID === undefined) {
+    iconID = 0;
+  }
+  var bestChamp = "Leblanc"
+  var skinNumber = 5;
+  let iconString = "http://ddragon.leagueoflegends.com/cdn/13.11.1/img/profileicon/" + iconID + ".png"
+  let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/" + bestChamp + "_" + skinNumber + ".jpg"
 
   function Analytics() {
 
     return (
-      <div class="flex-container">
-        <div class="spacer"></div>
-        <div class="child1">
-          <div class="flex-playerinfo"> 
+      <div className="flex-container">
+        <div className="spacer"></div>
+        <div className="child1">
+          <div className="flex-playerinfo"> 
             <img src={iconString} alt="Your icon" id="iconImg" display="flex" />
             <p display="flex" id="playername">{playerName}</p> 
           </div>
