@@ -32,7 +32,7 @@ app.get('/playerData', async (req, res) => {
 //Get list of matches and details
 app.get('/matchHistory', async (req, res) => {
     const puuid = await getPlayerPUUID(req.query.username);
-    const numberOfGames = 5;
+    const numberOfGames = 10;
     const link1 = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=" + numberOfGames + "&api_key=" + API_KEY;
     const matchIDList = await axios.get(link1)
         .then(response => response.data)
