@@ -19,7 +19,6 @@ function App() {
   function onButtonClick(event) {
     getPlayerData()
     getMatchData()
-    getPlayerDataFromMatches();
   }
 
   //Finds player data
@@ -42,26 +41,67 @@ function App() {
       })
   }
 
+  //Gets specific stats from past games
   function getPlayerDataFromMatches() {
-    console.log(matchData);
-    const numOfMatches = matchData.length;
-    const puuid = playerData.puuid;
-    let playerNumber = 0;
-    for (let i = 0; i < numOfMatches; i++) {
-      for (let n = 0; n < 10; n++) {
-        console.log(matchData[i].metadata.participants[n])
-        if (matchData[i].metadata.participants[n] === puuid) {
-          playerNumber = n;
+    if (matchData.length !== undefined) {
+      console.log(matchData.length)
+      const numOfMatches = matchData.length;
+      const puuid = playerData.puuid;
+
+      //Player info from games
+      let playerNumber = [];
+      let playerChamps = [];
+      let playerRoles = [];
+      let playerKills = [];
+      let playerDeaths = [];
+      let playerAssists = [];
+
+      //Find player position in list of players (ex: 3 of 10)
+      for (let i = 0; i < numOfMatches; i++) {
+        for (let n = 0; n < 10; n++) {
+          if (matchData[i].metadata.participants[n] === puuid) {
+            playerNumber.push(n);
+          }
         }
       }
+
+      //Finds players previous played champions from recent games
+      for (let i = 0; i < numOfMatches; i++) {
+        let champ = matchData[i].info.participants[playerNumber[i]].championName
+        playerChamps.push(champ);
+      }
+
+      //Finds players roles from recent games
+      for (let i = 0; i < numOfMatches; i++) {
+        let role = matchData[i].info.participants[playerNumber[i]].teamPosition
+        playerRoles.push(role);
+      }
+
+      //Finds players KDA from recent games      
+      for (let i = 0; i < numOfMatches; i++) {
+        let kills = matchData[i].info.participants[playerNumber[i]].kills
+        playerKills.push(kills);
+        let deaths = matchData[i].info.participants[playerNumber[i]].deaths
+        playerDeaths.push(deaths);
+        let assists = matchData[i].info.participants[playerNumber[i]].assists
+        playerAssists.push(assists);
+      }
+      console.log(playerNumber)
+      console.log(playerChamps)
+      console.log(playerRoles)
+      console.log(playerKills)
+      console.log(playerDeaths)
+      console.log(playerAssists)
     }
-    console.log(playerNumber)
   }
 
   useEffect(() => {
     console.log(playerData);
     console.log(matchData);
     }, [playerData, matchData]); 
+
+  getPlayerDataFromMatches()
+
 
   //Puts info into variables
   var playerID = playerData.id

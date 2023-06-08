@@ -6,7 +6,7 @@ var app = express();
 
 app.use(cors());
 
-const API_KEY = "RGAPI-490081c2-81c7-4ba7-a06a-73196dbccbe9";
+const API_KEY = "RGAPI-ee7019a5-37ce-4816-8e8c-31e5785d3dc6";
 
 //Gets player puuid
 function getPlayerPUUID(playerName) {
