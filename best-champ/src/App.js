@@ -15,6 +15,12 @@ function App() {
   //List of matches with details
   var [matchData, setMatchData] = useState({})
 
+  const champions = React.useRef([])
+  const roles = React.useRef([])
+  const kills = React.useRef([])
+  const deaths = React.useRef([])
+  const assists = React.useRef([])
+
   //When user searches for player
   function onButtonClick(event) {
     getPlayerData()
@@ -70,28 +76,28 @@ function App() {
         let champ = matchData[i].info.participants[playerNumber[i]].championName
         playerChamps.push(champ);
       }
+      champions.current = playerChamps;
+
 
       //Finds players roles from recent games
       for (let i = 0; i < numOfMatches; i++) {
-        let role = matchData[i].info.participants[playerNumber[i]].teamPosition
+        let role = matchData[i].info.participants[playerNumber[i]].lane
         playerRoles.push(role);
       }
+      roles.current = playerRoles;
 
       //Finds players KDA from recent games      
       for (let i = 0; i < numOfMatches; i++) {
-        let kills = matchData[i].info.participants[playerNumber[i]].kills
-        playerKills.push(kills);
-        let deaths = matchData[i].info.participants[playerNumber[i]].deaths
-        playerDeaths.push(deaths);
-        let assists = matchData[i].info.participants[playerNumber[i]].assists
-        playerAssists.push(assists);
+        let k = matchData[i].info.participants[playerNumber[i]].kills
+        playerKills.push(k);
+        let d = matchData[i].info.participants[playerNumber[i]].deaths
+        playerDeaths.push(d);
+        let a = matchData[i].info.participants[playerNumber[i]].assists
+        playerAssists.push(a);
       }
-      console.log(playerNumber)
-      console.log(playerChamps)
-      console.log(playerRoles)
-      console.log(playerKills)
-      console.log(playerDeaths)
-      console.log(playerAssists)
+      kills.current = playerKills;
+      deaths.current = playerDeaths;
+      assists.current = playerAssists;
     }
   }
 
@@ -140,6 +146,36 @@ function App() {
           <div className="analytics"> 
             <p display="block" className="analytics">Player ID: {playerID}</p>
             <p display="block" className="analytics">Player Puuid: {playerPUUID}</p>
+            
+            <ul>
+              {champions.current.map((value, index) => {
+                return <li key={index}>{value}</li>
+              })}
+            </ul>
+
+            <ul>
+              {roles.current.map((value, index) => {
+                return <li key={index}>{value}</li>
+              })}
+            </ul>
+
+            <ul>
+              {kills.current.map((value, index) => {
+                return <li key={index}>{value}</li>
+              })}
+            </ul>
+
+            <ul>
+              {deaths.current.map((value, index) => {
+                return <li key={index}>{value}</li>
+              })}
+            </ul>
+
+            <ul>
+              {assists.current.map((value, index) => {
+                return <li key={index}>{value}</li>
+              })}
+            </ul>
 
           </div>
         </div>
