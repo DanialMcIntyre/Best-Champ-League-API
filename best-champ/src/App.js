@@ -28,6 +28,8 @@ function App() {
 
   //When user searches for player
   function onButtonClick(event) {
+    setPlayerData([])
+    setMatchData([])
     getPlayerData()
     getMatchData()
   }
@@ -139,14 +141,37 @@ function App() {
 
       //Calculate points
       let points = 0;
-      points += Math.floor(cs.current[i] / 50)
-      points += kills.current[i]
-      points += 0.25 * assists.current[i]
-      points -= 0.25 * deaths.current[i]
-      if (win.current[i]) {
-        points += 3
+
+      let csPoints = Math.floor(cs.current[i] / 50)
+      if (csPoints > 10) {
+        csPoints = 10
       }
-      points += 0.1 * vision.current[i]
+
+      let killsPoints = kills.current[i]
+      if (killsPoints > 15) {
+        killsPoints = 15
+      }
+      
+      let assistsPoints = 0.5 * assists.current[i]
+      if (assistsPoints > 15) {
+        assistsPoints = 15
+      }
+
+      let deathsPoints = 0.5 * deaths.current[i]
+      if (deathsPoints > 5) {
+        deathsPoints = 5
+      }
+
+      if (win.current[i]) {
+        points += 5
+      }
+
+      let visionPoints = 0.1 * vision.current[i]
+      if (visionPoints > 10) {
+        visionPoints = 10
+      }
+
+      points = csPoints + killsPoints + assistsPoints - deathsPoints + visionPoints;
 
       //Add points to dictionary
       if (champions.current[i] in dict) {
@@ -169,30 +194,31 @@ function App() {
       let value = dict[currentChamp]
       switch(value[1]) {
         case 1:
-          value[0] *= 1;
+          value[0] *= 0.75;
           break;
         case 2:
           value[0] *= 1.2;
           break;
         case 3: 
-          value[0] *= 1.5;
+          value[0] *= 1.3;
           break;
         case 4:
-          value[0] *= 1.8;
+          value[0] *= 1.4;
           break;
         case 5:
-          value[0] *= 2.0;
+          value[0] *= 1.5;
           break;
         default:
-          value[0] *= 2.0;
+          value[0] *= 1.5;
           break; 
       }
+      value[0] = Math.round((value[0] / value[1]) * 100) / 100;
       dict[currentChamp] = value;
 
-      let averageScore = value[0] / value[1]
-      if (highestScore < averageScore) {
-        highestScore = averageScore
+      if (highestScore < value[0]) {
+        highestScore = value[0]
         bestChamp.current = currentChamp;
+        console.log(currentChamp + " " + highestScore)
       }
     }
     
@@ -207,7 +233,6 @@ function App() {
 
   getPlayerDataFromMatches()
   findBestChamp();
-
 
   //Puts info into variables
   var playerID = playerData.id
