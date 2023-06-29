@@ -175,35 +175,29 @@ function App() {
 
       //Calculate points
       let points = 0;
-
-      let csPoints = Math.floor(cs.current[i] / 50)
+      let gameDuration = Math.floor(matchData[i].info.gameDuration/60)
+      
+      let csPoints = Math.round(cs.current[i]/gameDuration)
       if (csPoints > 10) {
         csPoints = 10
       }
 
-      let killsPoints = kills.current[i]
-      if (killsPoints > 15) {
+      let killsPoints = 0.8*kills.current[i]
+      if(gameDuration < 20 && killsPoints > 15) {
         killsPoints = 15
-      }
-      
-      let assistsPoints = 0.5 * assists.current[i]
-      if (assistsPoints > 15) {
-        assistsPoints = 15
+      } else if (killsPoints > 20) {
+        killsPoints = 20
       }
 
-      let deathsPoints = 0.5 * deaths.current[i]
-      if (deathsPoints > 5) {
-        deathsPoints = 5
-      }
+      let assistsPoints = 0.5 * assists.current[i]
+
+      let deathsPoints = 0.7 * deaths.current[i]
 
       if (win.current[i]) {
         points += 5
       }
 
-      let visionPoints = 0.1 * vision.current[i]
-      if (visionPoints > 10) {
-        visionPoints = 10
-      }
+      let visionPoints = 0.2 * vision.current[i]
 
       //Add up points
       points = csPoints + killsPoints + assistsPoints - deathsPoints + visionPoints;
@@ -228,27 +222,8 @@ function App() {
 
       let currentChamp = key
       let value = dict[currentChamp]
-      switch(value[1]) {
-        case 1:
-          value[0] *= 0.75;
-          break;
-        case 2:
-          value[0] *= 1.2;
-          break;
-        case 3: 
-          value[0] *= 1.3;
-          break;
-        case 4:
-          value[0] *= 1.4;
-          break;
-        case 5:
-          value[0] *= 1.5;
-          break;
-        default:
-          value[0] *= 1.5;
-          break; 
-      }
       value[0] = Math.round((value[0] / value[1]) * 100) / 100;
+      value[0] *= (Math.log(value[1]) + 0.25)
       dict[currentChamp] = value;
 
       if (highestScore < value[0]) {
