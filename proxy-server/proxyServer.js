@@ -1,12 +1,13 @@
 var express = require('express');
 var cors = require('cors');
 const axios = require('axios');
+require('dotenv').config();
 
 var app = express();
 
 app.use(cors());
 
-const API_KEY = "RGAPI-ee7019a5-37ce-4816-8e8c-31e5785d3dc6";
+const API_KEY = process.env.API_KEY;
 
 //Gets player puuid
 function getPlayerPUUID(playerName) {

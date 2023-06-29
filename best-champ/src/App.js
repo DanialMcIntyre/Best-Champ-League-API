@@ -251,81 +251,56 @@ function App() {
       onButtonClick(event);
     }
   }
+  function Profile() {
+    return (
+      <div className="flex-playerinfo rounded-corner" width="100%"> 
+        <img src={iconString} alt="Your icon" id="iconImg" display="flex"  />
+        <div className=''>
+          <p display="flex" id="playername">{playerName}</p> 
+          <p display="flex" id="playerrank">Platinum IV</p> 
+        </div>
+      </div>
+    )
+  }
+
+  function MainStat() {
+    return (
+    <div className='rounded-corner'>
+
+    </div>
+    )
+  }
+
+  function SideChamp() {
+    return (
+      <div className='rounded-corner'>
+  
+      </div>
+    )
+  }
 
   function Analytics() {
 
     return (
       <div className="flex-container">
+        <div id="midspacer"></div>
         <div className="spacer"></div>
         <div className="child1">
-          <div className="flex-playerinfo"> 
-            <img src={iconString} alt="Your icon" id="iconImg" display="flex" />
-            <p display="flex" id="playername">{playerName}</p> 
-          </div>
+          <Profile></Profile>
           <img width="100%" src={imgString} alt="Your best champion" id="champImg" display="inline"/>
         </div>
         <div id="midspacer"></div>
-        <div className="child2">
-          <h1 id="title">Your Best Champ is: {bestChamp.current} </h1>
-          <div className="analytics"> 
-            <p display="block" className="analytics">Player ID: {playerID}</p>
-            <p display="block" className="analytics">Player Puuid: {playerPUUID}</p>
-            {/*
-            <ul>
-              {champions.current.map((value, index) => {
-                return <li key={index}>{value}</li>
-              })}
-            </ul>
-
-            
-
-            <ul>
-              {roles.current.map((value, index) => {
-                return <li key={index}>{value}</li>
-              })}
-            </ul>
-
-            <ul>
-              {kills.current.map((value, index) => {
-                return <li key={index}>{value}</li>
-              })}
-            </ul>
-
-            <ul>
-              {deaths.current.map((value, index) => {
-                return <li key={index}>{value}</li>
-              })}
-            </ul>
-
-            <ul>
-              {assists.current.map((value, index) => {
-                return <li key={index}>{value}</li>
-              })}
-            </ul>
-
-            <ul>
-              {cs.current.map((value, index) => {
-                return <li key={index}>{value}</li>
-              })}
-            </ul>
-
-            <ul>
-              {win.current.map((value, index) => {
-                return <li key={index}>{value.toString()}</li>
-              })}
-            </ul>
-
-            <ul>
-              {vision.current.map((value, index) => {
-                return <li key={index}>{value}</li>
-              })}
-            </ul>
-
-            */}
-
-          </div>
+        <div className='middle'>
+          <MainStat></MainStat>
         </div>
-        <div className="spacer"></div>
+        
+        <div id="midspacer"></div>
+        <div className='side'> 
+          <SideChamp></SideChamp>
+          <SideChamp></SideChamp>
+        </div>
+        <div id="midspacer"></div>
+
       </div>
     )
   }
