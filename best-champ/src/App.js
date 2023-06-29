@@ -15,6 +15,7 @@ function App() {
   var [matchData, setMatchData] = useState({})
 
   //Data from matches
+  const number = React.useRef([]) //Player index in match list
   const champions = React.useRef([])
   const roles = React.useRef([])
   const kills = React.useRef([])
@@ -23,8 +24,14 @@ function App() {
   const cs = React.useRef([])
   const win = React.useRef([])
   const vision = React.useRef([])
+  const numWins = React.useRef([])
+  const numLoss = React.useRef([])
 
   const bestChamp = React.useRef();
+  const bestChampNumMatches = React.useRef();
+  const bestChampMatch = React.useRef();
+  const bestChampWins = React.useRef();
+  const bestChampLosses = React.useRef();
 
   //When user searches for player
   function onButtonClick(event) {
@@ -79,6 +86,7 @@ function App() {
           }
         }
       }
+      number.current = playerNumber;
 
       //Finds players previous played champions from recent games
       for (let i = 0; i < numOfMatches; i++) {
@@ -127,13 +135,26 @@ function App() {
         playerVision.push(vision);
       }
       vision.current = playerVision;
+
+      //Finds number of general wins and losses
+      for (let i = 0; i < numOfMatches; i++) {
+        if (playerWin[i]) {
+          numWins.current++;
+        }
+      }
+      numLoss.current = numOfMatches - numWins.current;
+
     }
+
+
   }
 
   function findBestChamp() {
 
     //Dictionary will hold all played champions alongside their point score and number of times it was played
     var dict = {}
+    
+    var pointsPerMatch = [];
 
     for(let i = 0; i < matchData.length; i++) {
       //This will store the score of the champion, alongside the amount of times it was played
@@ -171,7 +192,9 @@ function App() {
         visionPoints = 10
       }
 
+      //Add up points
       points = csPoints + killsPoints + assistsPoints - deathsPoints + visionPoints;
+      pointsPerMatch.push(points);
 
       //Add points to dictionary
       if (champions.current[i] in dict) {
@@ -221,8 +244,50 @@ function App() {
         console.log(currentChamp + " " + highestScore)
       }
     }
+
     
-    console.log(dict);
+    console.log(pointsPerMatch)
+    let highestPoints = 0;
+    let currentHighestMatch = 0;
+    for (var i = 0; i < matchData.length; i++) {
+      if (matchData[i].info.participants[number.current[i]].championName === bestChamp.current) {
+        if (pointsPerMatch[i] > highestPoints) {
+          highestPoints = pointsPerMatch[i];
+          currentHighestMatch = i;
+        }
+      }
+    }
+    bestChampMatch.current = currentHighestMatch + 1;
+
+    console.log(bestChampMatch.current);
+  }
+
+  function bestChampStats() {
+
+    if (matchData.length !== undefined) {
+      const numOfMatches = matchData.length;
+
+      let numGames = 0;
+      let numWins = 0;
+
+      //Finds number of games on best champ
+      for (let i = 0; i < numOfMatches; i++) {
+        if (matchData[i].info.participants[number.current[i]].championName === bestChamp.current) {
+            numGames++;
+        }
+      }
+      bestChampNumMatches.current = numGames;
+
+      //Finds number of win on best champ
+      for (let i = 0; i < numOfMatches; i++) {
+        if (win.current[i] && matchData[i].info.participants[number.current[i]].championName === bestChamp.current) {
+            numWins++;
+        }
+      }
+      bestChampWins.current = numWins;
+      bestChampLosses.current = numGames - numWins;
+
+    }
   }
 
   //Runs on every page re-render
@@ -233,10 +298,11 @@ function App() {
 
   getPlayerDataFromMatches()
   findBestChamp();
+  bestChampStats();
 
   //Puts info into variables
-  var playerID = playerData.id
-  var playerPUUID = playerData.puuid
+  //var playerID = playerData.id
+  //var playerPUUID = playerData.puuid
   var playerName = playerData.name
   let iconID = playerData.profileIconId;
   if (iconID === undefined) {
@@ -266,6 +332,12 @@ function App() {
   function MainStat() {
     return (
     <div className='rounded-corner'>
+
+      <p>Your Best Champion Is: {bestChamp.current}</p>
+      <p>You have {bestChampWins.current} wins</p>
+      <p>You have {bestChampLosses.current} losses</p>
+      <p>Your winrate is {bestChampWins.current / bestChampNumMatches.current * 100}%</p>
+      <p>Your best game is game {bestChampMatch.current}</p>
 
     </div>
     )
