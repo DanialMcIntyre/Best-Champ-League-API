@@ -49,19 +49,28 @@
 }
 
 #iconImg {
-  width: 25%;
+  width: 75px;  
+  height: 75px;
   border-radius: 50%;
 }
 
-#playername {
-  vertical-align: middle;
+.info {
+  margin: 0 0 0 0;
   padding-left: 5%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 5%;
+}
+
+#playername {
   font-size: 100%;
 }
-#playerank {
-  vertical-align: middle;
-  padding-left: 5%;
-  font-size: 30%;
+
+#playerrank {
+  font-size: 80%;
+  color: gray;
 }
 
 .flex-playerinfo {

@@ -11,6 +11,8 @@ function App() {
 
   //Player data
   var [playerData, setPlayerData] = useState({})
+  //Player rank
+  var [playerRank, setPlayerRank] = useState({})
   //List of matches with details
   var [matchData, setMatchData] = useState({})
 
@@ -37,7 +39,9 @@ function App() {
   function onButtonClick(event) {
     setPlayerData([])
     setMatchData([])
+    setPlayerRank([])
     getPlayerData()
+    getPlayerRank()
     getMatchData()
   }
 
@@ -46,6 +50,15 @@ function App() {
     axios.get("http://localhost:4000/playerData", { params: {username: searchText}})
     .then(function (response) {
       setPlayerData(response.data);
+    }).catch(function (error) {
+      console.log(error);
+    })
+  }
+
+  function getPlayerRank() {
+    axios.get("http://localhost:4000/playerRank", { params: {username: searchText}})
+    .then(function (response) {
+      setPlayerRank(response.data);
     }).catch(function (error) {
       console.log(error);
     })
@@ -293,8 +306,9 @@ function App() {
   //Runs on every page re-render
   useEffect(() => {
     console.log(playerData);
+    console.log(JSON.stringify(playerRank))
     console.log(matchData);
-    }, [playerData, matchData]); 
+    }, [playerData, playerRank, matchData]); 
 
   getPlayerDataFromMatches()
   findBestChamp();
@@ -304,6 +318,18 @@ function App() {
   //var playerID = playerData.id
   //var playerPUUID = playerData.puuid
   var playerName = playerData.name
+  var pRank;
+  var wRatio;
+  try {
+    pRank = playerRank[0].tier
+    pRank = pRank.toLowerCase()
+    pRank = pRank.charAt(0).toUpperCase() + pRank.slice(1)
+    pRank += " " + playerRank[0].rank + " - " + playerRank[0].leaguePoints + "LP"
+    wRatio = playerRank[0].wins + "W / " + playerRank[0].losses + "L"
+  } catch {
+    pRank = ""
+    wRatio = ""
+  }
   let iconID = playerData.profileIconId;
   if (iconID === undefined) {
     iconID = 0;
@@ -321,9 +347,10 @@ function App() {
     return (
       <div className="flex-playerinfo rounded-corner" width="100%"> 
         <img src={iconString} alt="Your icon" id="iconImg" display="flex"  />
-        <div className=''>
-          <p display="flex" id="playername">{playerName}</p> 
-          <p display="flex" id="playerrank">Platinum IV</p> 
+        <div className='info'>
+          <div id="playername">{playerName}</div> 
+          <div id="playerrank">{pRank}</div> 
+          <div id="playerrank">{wRatio}</div> 
         </div>
       </div>
     )
