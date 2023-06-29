@@ -19,6 +19,14 @@ function getPlayerPUUID(playerName) {
         }).catch(err => err);
 }
 
+function getSummonerID(playerName) {
+    const link = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + playerName + "?api_key=" + API_KEY;  
+    return axios.get(link)
+        .then(response => {
+            return response.data.id;
+        }).catch(err => err);
+}
+
 //Get player data
 app.get('/playerData', async (req, res) => {
     const searchName = req.query.username;
@@ -28,6 +36,15 @@ app.get('/playerData', async (req, res) => {
         .catch(err => err);
     
     res.json(playerData);
+})
+
+app.get('/playerRank', async (req, res) => {
+    const id = await getSummonerID(req.query.username);
+    const link = "https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/" + id + "?api_key=" + API_KEY;  
+    const playerRank = await axios.get(link)
+        .then(response => response.data)
+        .catch(err => err);
+    res.json(playerRank);
 })
 
 //Get list of matches and details
