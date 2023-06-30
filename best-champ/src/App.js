@@ -245,7 +245,7 @@ function App() {
         }
       }
     }
-    bestChampMatch.current = currentHighestMatch + 1;
+    bestChampMatch.current = currentHighestMatch;
 
     console.log(bestChampMatch.current);
   }
@@ -276,6 +276,12 @@ function App() {
       bestChampLosses.current = numGames - numWins;
 
     }
+  }
+
+  function highlightGame() {
+
+    var bestMatch = matchData[bestChampMatch];
+
   }
 
   //Runs on every page re-render
@@ -342,6 +348,19 @@ function App() {
       <p>Your winrate is {bestChampWins.current / bestChampNumMatches.current * 100}%</p>
       <p>Your best game is game {bestChampMatch.current}</p>
 
+      <div className='rounded-corner-green'>
+
+        <div className='rounded-corner-blue'>
+          <p>
+          </p>
+        </div>
+
+        <div className='rounded-corner-red'>
+
+        </div>
+
+      </div>
+
     </div>
     )
   }
@@ -375,6 +394,9 @@ function App() {
         <div className='side'> 
           <SideChamp></SideChamp>
           <SideChamp></SideChamp>
+          <SideChamp></SideChamp>
+          <SideChamp></SideChamp>
+          <SideChamp></SideChamp>
         </div>
         <div id="midspacer"></div>
 
@@ -384,7 +406,6 @@ function App() {
   
   return (
     <div>
-      <div className="bg">
       <div className="App">
         <div className="content">
           <div className = "font-face-league">
@@ -393,7 +414,6 @@ function App() {
             </div>
             <input type="text" onChange = {e => setSearchText(e.target.value)} onKeyDown = {e => handleKeyDown(e)}/>
             <button onClick = {e => onButtonClick(e)}>Search for player</button>
-
             <div>
               {
               JSON.stringify(playerData.status) === "404" ?
@@ -410,7 +430,6 @@ function App() {
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
   

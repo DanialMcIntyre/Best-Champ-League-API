@@ -2,6 +2,8 @@
   align-items: center;
   text-align: center;
   height: 100vh;
+  background-image: url(./images/background.jpg);
+  background-size: cover;
 }
 
 .flex-container {
@@ -102,12 +104,6 @@
   margin-top: 0;
 }
 
-.bg {
-  background-image: url(./images/background.jpg);
-  background-attachment: fixed;
-  background-size: "cover";
-}
-
 .rounded-corner {
   background-color: white;
   border-radius: 10px;
@@ -132,3 +128,29 @@
   object-fit: cover; /* Maintain the image's aspect ratio */
   border-radius: 50%;
 }
+
+.rounded-corner-green {
+  background-color: rgb(163, 236, 156);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+}
+
+.rounded-corner-blue {
+  background-color: rgb(17, 0, 250);
+  border-radius: 10px;
+  padding: 20px;
+  width: 50%;
+  float: left;
+  border: 2px solid rgb(17, 0, 250);
+}
+
+.rounded-corner-red {
+  background-color: rgb(240, 11, 11);
+  border-radius: 10px;
+  padding: 20px;  
+  width: 50%;
+  float: left;
+  border: 2px solid rgb(240, 11, 11);
+}
+
