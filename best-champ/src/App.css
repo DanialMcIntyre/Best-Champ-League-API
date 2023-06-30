@@ -13,7 +13,6 @@
 
 .child1 {
   display: flex;
-  justify-content: center;
   width: 20%;
   flex-direction: column;
   overflow: hidden;
@@ -54,6 +53,16 @@
   border-radius: 50%;
 }
 
+#image-container {
+  height: 50%;
+  overflow: hidden;
+}
+
+#champImg {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
 .info {
   margin: 0 0 0 0;
   padding-left: 5%;
@@ -77,6 +86,7 @@
   display: flex;
   justify-content: left;
   margin-bottom: 5%;
+  height: 15%;
 }
 
 
@@ -102,4 +112,23 @@
   background-color: white;
   border-radius: 10px;
   padding: 20px;
+}
+
+#sideChamp-container {
+  margin-bottom: 5%;
+  height: 30%;
+}
+
+#sidechampimagecontainer {
+  width: 10%; /* Set the desired width of the container */
+  height: 10%; /* Set the desired height of the container */
+  overflow: hidden;
+  border-radius: 10%;
+}
+
+#sidechampimg {
+  width: 25%; /* Make the image fill the container width */
+  height: 25%; /* Make the image fill the container height */
+  object-fit: cover; /* Maintain the image's aspect ratio */
+  border-radius: 50%;
 }

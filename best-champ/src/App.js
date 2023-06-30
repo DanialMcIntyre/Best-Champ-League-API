@@ -312,6 +312,7 @@ function App() {
   var skinNumber = 0;
   let iconString = "http://ddragon.leagueoflegends.com/cdn/13.11.1/img/profileicon/" + iconID + ".png"
   let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/" + bestChamp.current + "_" + skinNumber + ".jpg"
+  let champ2 = "http://ddragon.leagueoflegends.com/cdn/13.13.1/img/champion/Aatrox.png"
 
   function handleKeyDown(event) {
     if (event.key === 'Enter') {
@@ -347,8 +348,10 @@ function App() {
 
   function SideChamp() {
     return (
-      <div className='rounded-corner'>
-  
+      <div className='rounded-corner' id="sideChamp-container">
+        <div id="sidechampimgcontainer">
+          <img src={champ2} alt="Your second best" id="sidechampimg" display="flex"  />
+        </div>
       </div>
     )
   }
@@ -361,7 +364,7 @@ function App() {
         <div className="spacer"></div>
         <div className="child1">
           <Profile></Profile>
-          <img width="100%" src={imgString} alt="Your best champion" id="champImg" display="inline"/>
+          <div id="image-container"><img src={imgString} alt="Your best champion" id="champImg" /></div>
         </div>
         <div id="midspacer"></div>
         <div className='middle'>
