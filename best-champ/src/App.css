@@ -84,7 +84,6 @@
   display: flex;
   justify-content: left;
   margin-bottom: 5%;
-  height: 15%;
 }
 
 
@@ -109,20 +108,27 @@
 #sideChamp-container {
   margin-bottom: 5%;
   height: 30%;
-}
-
-#sidechampimagecontainer {
-  width: 10%; /* Set the desired width of the container */
-  height: 10%; /* Set the desired height of the container */
-  overflow: hidden;
-  border-radius: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
 }
 
 #sidechampimg {
-  width: 25%; /* Make the image fill the container width */
-  height: 25%; /* Make the image fill the container height */
+   /* Make the image fill the container height */
+  width: 40%;
   object-fit: cover; /* Maintain the image's aspect ratio */
   border-radius: 50%;
+}
+
+#place {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+}
+#infobox {
+  justify-content: left;
 }
 
 .rounded-corner-green {

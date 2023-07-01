@@ -318,7 +318,8 @@ function App() {
   var skinNumber = 0;
   let iconString = "http://ddragon.leagueoflegends.com/cdn/13.11.1/img/profileicon/" + iconID + ".png"
   let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/" + bestChamp.current + "_" + skinNumber + ".jpg"
-  let champ2 = "http://ddragon.leagueoflegends.com/cdn/13.13.1/img/champion/Aatrox.png"
+  let champ2 = "Aatrox"
+  let champ2img = "http://ddragon.leagueoflegends.com/cdn/13.13.1/img/champion/Aatrox.png"
 
   function handleKeyDown(event) {
     if (event.key === 'Enter') {
@@ -368,9 +369,14 @@ function App() {
   function SideChamp() {
     return (
       <div className='rounded-corner' id="sideChamp-container">
-        <div id="sidechampimgcontainer">
-          <img src={champ2} alt="Your second best" id="sidechampimg" display="flex"  />
-        </div>
+        <div id="place">2nd</div>
+        <img src={champ2img} alt="Your second best" id="sidechampimg" display="flex"/>
+        <div>{champ2}</div>
+        <div id="infobox">
+          <div> Winrate: </div>
+          <div> Average Kills: </div>
+          <div> Average Gold: </div>
+          </div>
       </div>
     )
   }
