@@ -397,6 +397,9 @@ function App() {
           <SideChamp></SideChamp>
           <SideChamp></SideChamp>
           <SideChamp></SideChamp>
+          <SideChamp></SideChamp>
+          <SideChamp></SideChamp>
+          <SideChamp></SideChamp>
         </div>
         <div id="midspacer"></div>
 

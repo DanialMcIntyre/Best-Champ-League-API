@@ -55,11 +55,6 @@
   border-radius: 50%;
 }
 
-#image-container {
-  height: 50%;
-  overflow: hidden;
-}
-
 #champImg {
   width: 100%;
   height: auto;
