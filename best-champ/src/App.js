@@ -38,6 +38,7 @@ function App() {
 
   //When user searches for player
   function onButtonClick(event) {
+    bestChamp.current = undefined;
     setPlayerData([])
     setMatchData([])
     setPlayerRank([])
@@ -231,7 +232,6 @@ function App() {
       if (highestScore < value[0]) {
         highestScore = value[0]
         bestChamp.current = currentChamp;
-        console.log(currentChamp + " " + highestScore)
       }
       for(let i = 0; i < 5; i++) {
         if (value[0] > otherChamps.current[i].score) {
@@ -241,9 +241,7 @@ function App() {
         }
       }
     }
-
     
-    console.log(pointsPerMatch)
     let highestPoints = 0;
     let currentHighestMatch = 0;
     for (var i = 0; i < matchData.length; i++) {
@@ -255,9 +253,6 @@ function App() {
       }
     }
     bestChampMatch.current = currentHighestMatch;
-
-    console.log(bestChampMatch.current); 
-    console.log(otherChamps.current[0].name) 
   }
 
   function bestChampStats() {
@@ -297,8 +292,6 @@ function App() {
   //Runs on every page re-render
   useEffect(() => {
     console.log(playerData);
-    console.log(JSON.stringify(playerRank))
-    console.log(matchData);
     }, [playerData, playerRank, matchData]); 
 
   getPlayerDataFromMatches()
@@ -424,8 +417,10 @@ function App() {
             <div className = "title">
               <h1>Best Champion Finder!</h1>
             </div>
+
             <input type="text" onChange = {e => setSearchText(e.target.value)} onKeyDown = {e => handleKeyDown(e)}/>
             <button onClick = {e => onButtonClick(e)}>Search for player</button>
+            
             <div>
               {
               JSON.stringify(playerData.status) === "404" ?
@@ -433,8 +428,13 @@ function App() {
               <p>Please enter a valid username!</p>
               </>
               :
-              JSON.stringify(playerData) !== '{}' ?
+              JSON.stringify(bestChamp.current) !== undefined ?
               <Analytics/>
+              :
+              JSON.stringify(playerData) !== '{}' ?
+              <>
+              <p>Loading...</p>
+              </>
               :
               <><p>No player data</p></>}
             </div>
