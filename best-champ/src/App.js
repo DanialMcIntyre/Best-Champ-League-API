@@ -433,10 +433,15 @@ function App() {
               :
               JSON.stringify(playerData) !== '{}' ?
               <>
-              <p>Loading...</p>
+              <br/>
+              <h1>Loading...</h1>
+              <img src={require('./images/loading.gif')} alt="loading..." />
               </>
               :
-              <><p>No player data</p></>}
+              <>
+              <br/>
+              <h1>No player data</h1>
+              </>}
             </div>
             <br />
           </div>
