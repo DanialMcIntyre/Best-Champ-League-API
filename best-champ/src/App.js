@@ -34,6 +34,7 @@ function App() {
   const bestChampMatch = React.useRef();
   const bestChampWins = React.useRef();
   const bestChampLosses = React.useRef();
+  const otherChamps = React.useRef([]);
 
   //When user searches for player
   function onButtonClick(event) {
@@ -218,9 +219,10 @@ function App() {
     }
 
     let highestScore = 0;
+    otherChamps.current = [{name: "default", score: -100}, {name: "default", score: -100}, {name: "default", score: -100}, {name: "default", score: -100}, {name: "default", score: -100}]
     for (var key in dict) {
-
       let currentChamp = key
+
       let value = dict[currentChamp]
       value[0] = Math.round((value[0] / value[1]) * 100) / 100;
       value[0] *= (Math.log(value[1]) + 0.25)
@@ -230,6 +232,13 @@ function App() {
         highestScore = value[0]
         bestChamp.current = currentChamp;
         console.log(currentChamp + " " + highestScore)
+      }
+      for(let i = 0; i < 5; i++) {
+        if (value[0] > otherChamps.current[i].score) {
+          otherChamps.current.splice(i, 0, {name: currentChamp, score: value[0]})
+          otherChamps.current.pop()
+          break
+        }
       }
     }
 
@@ -247,7 +256,8 @@ function App() {
     }
     bestChampMatch.current = currentHighestMatch;
 
-    console.log(bestChampMatch.current);
+    console.log(bestChampMatch.current); 
+    console.log(otherChamps.current[0].name) 
   }
 
   function bestChampStats() {
@@ -318,9 +328,6 @@ function App() {
   var skinNumber = 0;
   let iconString = "http://ddragon.leagueoflegends.com/cdn/13.11.1/img/profileicon/" + iconID + ".png"
   let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/" + bestChamp.current + "_" + skinNumber + ".jpg"
-  let champ2 = "Aatrox"
-  let champ2img = "http://ddragon.leagueoflegends.com/cdn/13.13.1/img/champion/Aatrox.png"
-
   function handleKeyDown(event) {
     if (event.key === 'Enter') {
       onButtonClick(event);
@@ -366,12 +373,12 @@ function App() {
     )
   }
 
-  function SideChamp() {
+  function SideChamp(props) {
     return (
       <div className='rounded-corner' id="sideChamp-container">
-        <div id="place">2nd</div>
-        <img src={champ2img} alt="Your second best" id="sidechampimg" display="flex"/>
-        <div>{champ2}</div>
+        <div id="place">{props.place}</div>
+        <img src={"http://ddragon.leagueoflegends.com/cdn/13.13.1/img/champion/"+props.name+".png"} alt="Your second best" id="sidechampimg" display="flex"/>
+        <div>{props.name}</div>
         <div id="infobox">
           <div> Winrate: </div>
           <div> Average Kills: </div>
@@ -398,14 +405,10 @@ function App() {
         
         <div id="midspacer"></div>
         <div className='side'> 
-          <SideChamp></SideChamp>
-          <SideChamp></SideChamp>
-          <SideChamp></SideChamp>
-          <SideChamp></SideChamp>
-          <SideChamp></SideChamp>
-          <SideChamp></SideChamp>
-          <SideChamp></SideChamp>
-          <SideChamp></SideChamp>
+          <SideChamp name={otherChamps.current[1].name} place="2nd" id="2"></SideChamp>
+          <SideChamp name={otherChamps.current[2].name} place="3rd" id="3"></SideChamp>
+          <SideChamp name={otherChamps.current[3].name} place="4th" id="4"></SideChamp>
+          <SideChamp name={otherChamps.current[4].name} place="5th" id="5"></SideChamp>
         </div>
         <div id="midspacer"></div>
 
