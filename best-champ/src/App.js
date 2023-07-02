@@ -29,12 +29,23 @@ function App() {
   const numWins = React.useRef([])
   const numLoss = React.useRef([])
 
+  //Best champ related
   const bestChamp = React.useRef();
   const bestChampNumMatches = React.useRef();
   const bestChampMatch = React.useRef();
   const bestChampWins = React.useRef();
   const bestChampLosses = React.useRef();
   const otherChamps = React.useRef([]);
+  
+  //Highlight game related
+  const playerNames = React.useRef([]);
+  const playerChamps = React.useRef([]);
+  const playerKDAs = React.useRef([]);
+  const playerCS = React.useRef([]);
+  const playerWards = React.useRef([]);
+  const playerWin = React.useRef();
+  const gameLength = React.useRef();
+  const startTime = React.useRef([]);
 
   //When user searches for player
   function onButtonClick(event) {
@@ -161,7 +172,6 @@ function App() {
 
     }
 
-
   }
 
   function findBestChamp() {
@@ -285,18 +295,51 @@ function App() {
 
   function highlightGame() {
 
-    var bestMatch = matchData[bestChampMatch];
+    if (matchData.length !== undefined && bestChamp.current !== undefined) {
+
+      for (var i = 0; i < 10; i++) {
+        playerChamps.current[i] = matchData[bestChampMatch.current].info.participants[i].championName;
+        playerNames.current[i] = matchData[bestChampMatch.current].info.participants[i].summonerName;
+
+        var kills = matchData[bestChampMatch.current].info.participants[i].kills;
+        var deaths = matchData[bestChampMatch.current].info.participants[i].deaths;
+        var assists = matchData[bestChampMatch.current].info.participants[i].assists;
+
+        playerKDAs.current[i] = kills + "/" + deaths + "/" + assists;
+
+        playerCS.current[i] = matchData[bestChampMatch.current].info.participants[i].totalMinionsKilled;
+        playerWards.current[i] = matchData[bestChampMatch.current].info.participants[i].wardsPlaced;
+        
+      }
+
+      if (matchData[bestChampMatch.current].info.participants[number.current[bestChampMatch.current]].win) {
+        playerWin.current = "Victory";
+      } else {
+        playerWin.current = "Defeat";
+      }
+
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      var temp = new Date(matchData[bestChampMatch.current].info.gameCreation)
+      startTime.current = months[temp.getMonth()] + " " + temp.getDate();
+
+      temp = matchData[bestChampMatch.current].info.gameDuration;
+      var minutes = Math.floor(temp / 60);
+      var seconds = temp - minutes * 60;
+      gameLength.current = minutes + " minutes " + seconds + " seconds";
+    
+    }
 
   }
 
   //Runs on every page re-render
   useEffect(() => {
-    console.log(playerData);
+    console.log(matchData);
     }, [playerData, playerRank, matchData]); 
 
   getPlayerDataFromMatches()
   findBestChamp();
   bestChampStats();
+  highlightGame();
 
   //Puts info into variables
   //var playerID = playerData.id
@@ -326,6 +369,7 @@ function App() {
       onButtonClick(event);
     }
   }
+
   function Profile() {
     return (
       <div className="flex-playerinfo rounded-corner" width="100%"> 
@@ -347,17 +391,38 @@ function App() {
       <p>You have {bestChampWins.current} wins</p>
       <p>You have {bestChampLosses.current} losses</p>
       <p>Your winrate is {bestChampWins.current / bestChampNumMatches.current * 100}%</p>
-      <p>Your best game is game {bestChampMatch.current}</p>
+
+      <h1>{playerWin.current}</h1>
+      <h3>Match played on {(startTime.current)}</h3>
+      <h3>Game duration {(gameLength.current)}</h3>
 
       <div className='rounded-corner-green'>
 
+
         <div className='rounded-corner-blue'>
-          <p>
-          </p>
+          <h2> {playerChamps.current[0]} ({playerNames.current[0]}) {playerKDAs.current[0]}</h2>
+          <p>CS: {playerCS.current[0]} Wards placed: {playerWards.current[0]}</p>
+          <h2> {playerChamps.current[1]} ({playerNames.current[1]}) {playerKDAs.current[1]}</h2>
+          <p>CS: {playerCS.current[1]} Wards placed: {playerWards.current[1]}</p>
+          <h2> {playerChamps.current[2]} ({playerNames.current[2]}) {playerKDAs.current[2]}</h2>
+          <p>CS: {playerCS.current[2]} Wards placed: {playerWards.current[2]}</p>
+          <h2> {playerChamps.current[3]} ({playerNames.current[3]}) {playerKDAs.current[3]}</h2>
+          <p>CS: {playerCS.current[3]} Wards placed: {playerWards.current[3]}</p>
+          <h2> {playerChamps.current[4]} ({playerNames.current[4]}) {playerKDAs.current[4]}</h2>
+          <p>CS: {playerCS.current[4]} Wards placed: {playerWards.current[4]}</p>
         </div>
 
         <div className='rounded-corner-red'>
-
+          <h2> {playerChamps.current[5]} ({playerNames.current[5]}) {playerKDAs.current[5]}</h2>
+          <p>CS: {playerCS.current[5]} Wards placed: {playerWards.current[5]}</p>
+          <h2> {playerChamps.current[6]} ({playerNames.current[6]}) {playerKDAs.current[6]}</h2>
+          <p>CS: {playerCS.current[6]} Wards placed: {playerWards.current[6]}</p>
+          <h2> {playerChamps.current[7]} ({playerNames.current[7]}) {playerKDAs.current[7]}</h2>
+          <p>CS: {playerCS.current[7]} Wards placed: {playerWards.current[7]}</p>
+          <h2> {playerChamps.current[8]} ({playerNames.current[8]}) {playerKDAs.current[8]}</h2>
+          <p>CS: {playerCS.current[8]} Wards placed: {playerWards.current[8]}</p>
+          <h2> {playerChamps.current[9]} ({playerNames.current[9]}) {playerKDAs.current[9]}</h2>
+          <p>CS: {playerCS.current[9]} Wards placed: {playerWards.current[9]}</p>
         </div>
 
       </div>
@@ -370,7 +435,7 @@ function App() {
     return (
       <div className='rounded-corner' id="sideChamp-container">
         <div id="place">{props.place}</div>
-        <img src={"http://ddragon.leagueoflegends.com/cdn/13.13.1/img/champion/"+props.name+".png"} alt="Your second best" id="sidechampimg" display="flex"/>
+        <img src={"http://ddragon.leagueoflegends.com/cdn/13.13.1/img/champion/" + props.name + ".png"} alt="Your second best" id="sidechampimg" display="flex"/>
         <div>{props.name}</div>
         <div id="infobox">
           <div> Winrate: </div>

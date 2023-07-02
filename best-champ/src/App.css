@@ -135,24 +135,26 @@
   background-color: rgb(163, 236, 156);
   border-radius: 10px;
   padding: 20px;
+  position: relative;
   display: flex;
 }
 
 .rounded-corner-blue {
-  background-color: rgb(17, 0, 250);
+  background-color: rgb(125, 115, 255);
   border-radius: 10px;
   padding: 20px;
   width: 50%;
   float: left;
-  border: 2px solid rgb(17, 0, 250);
+  border: 2px solid rgb(125, 115, 255);
 }
 
 .rounded-corner-red {
-  background-color: rgb(240, 11, 11);
+  background-color: rgb(253, 106, 106);
   border-radius: 10px;
   padding: 20px;  
   width: 50%;
   float: left;
-  border: 2px solid rgb(240, 11, 11);
+  border: 2px solid rgb(253, 106, 106);
+  text-align: right;
 }
 
