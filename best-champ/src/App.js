@@ -222,10 +222,18 @@ function App() {
         newValue[1]++;
         value[0] = points + newValue[0];
         value[1] = newValue[1];
+        if(win.current[i]) {
+          value[2] = newValue[2] + 1
+        }
         dict[champions.current[i]] = value;
       } else {
         value[0] = points;
         value[1] = 1;
+        if(win.current[i]) {
+          value[2] = 1;
+        } else {
+          value[2] = 0;
+        }
         dict[champions.current[i]] = value;
       }
     }
@@ -246,7 +254,7 @@ function App() {
         highestScore = value[0]
         bestChamp.current = currentChamp;
       }
-      otherChamps.current[count] = {name: currentChamp, score: value[0]}
+      otherChamps.current[count] = {name: currentChamp, score: value[0], games: value[1], wins: value[2]}
       bestScore.current[count] = (Math.round(value[0] / 50 * 100) / 100)
       count++;
     }
@@ -444,9 +452,11 @@ function App() {
         <img src={"http://ddragon.leagueoflegends.com/cdn/13.13.1/img/champion/" + props.name + ".png"} alt="Your second best" id="sidechampimg" display="flex"/>
         <div>{props.name}</div>
         <div id="infobox">
-          <div> Winrate: </div>
+          {
+            console.log(props.name + " wins: " + props.wins)
+          }
+          <div>{props.wins/props.games*100}% Winrate ({props.games} Games)</div>
           <div> Average Kills: </div>
-          <div> Average Gold: </div>
           </div>
       </div>
     )
@@ -468,12 +478,15 @@ function App() {
         </div>
         
         <div id="midspacer"></div>
-        <div className='side'> 
-
-        {otherChamps.current.map((item,index)=>{
-         return <SideChamp name={otherChamps.current[index].name} place={(bestScore.current[index + 1] * 100).toFixed(0) + "%"}></SideChamp>
-          })}
+        <div class="scrollable-box">
+          <div class="content">
+            {otherChamps.current.map((item,index)=>{
+          return <SideChamp name={otherChamps.current[index].name} place={(bestScore.current[index + 1] * 100).toFixed(0) + "%"} games={otherChamps.current[index].games} wins={otherChamps.current[index].wins}></SideChamp>
+            })}
+          </div>
         </div>
+
+        
         <div id="midspacer"></div>
 
       </div>
