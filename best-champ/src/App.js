@@ -35,6 +35,7 @@ function App() {
   const bestChampMatch = React.useRef();
   const bestChampWins = React.useRef();
   const bestChampLosses = React.useRef();
+  const bestScore = React.useRef([]);
   const otherChamps = React.useRef([]);
   
   //Highlight game related
@@ -203,7 +204,7 @@ function App() {
 
       let assistsPoints = 0.5 * assists.current[i]
 
-      let deathsPoints = 0.7 * deaths.current[i]
+      let deathsPoints = 0.5 * deaths.current[i]
 
       if (win.current[i]) {
         points += 5
@@ -230,11 +231,13 @@ function App() {
     }
 
     let highestScore = 0;
-    otherChamps.current = [{name: "default", score: -100}, {name: "default", score: -100}, {name: "default", score: -100}, {name: "default", score: -100}, {name: "default", score: -100}]
+
+    let count = 0;
     for (var key in dict) {
       let currentChamp = key
 
       let value = dict[currentChamp]
+
       value[0] = Math.round((value[0] / value[1]) * 100) / 100;
       value[0] *= (Math.log(value[1]) + 0.25)
       dict[currentChamp] = value;
@@ -243,14 +246,14 @@ function App() {
         highestScore = value[0]
         bestChamp.current = currentChamp;
       }
-      for(let i = 0; i < 5; i++) {
-        if (value[0] > otherChamps.current[i].score) {
-          otherChamps.current.splice(i, 0, {name: currentChamp, score: value[0]})
-          otherChamps.current.pop()
-          break
-        }
-      }
+      otherChamps.current[count] = {name: currentChamp, score: value[0]}
+      bestScore.current[count] = (Math.round(value[0] / 50 * 100) / 100)
+      count++;
     }
+    otherChamps.current.sort(function(a,b) {
+      return b.score - a.score
+    });
+    bestScore.current.sort().reverse();
     
     let highestPoints = 0;
     let currentHighestMatch = 0;
@@ -263,6 +266,7 @@ function App() {
       }
     }
     bestChampMatch.current = currentHighestMatch;
+    otherChamps.current.splice(0, 1);
   }
 
   function bestChampStats() {
@@ -388,11 +392,13 @@ function App() {
     <div className='rounded-corner'>
 
       <p>Your Best Champion Is: {bestChamp.current}</p>
+      <p>Your Best Score Is: {bestScore.current[0] * 100}%</p>
       <p>You have {bestChampWins.current} wins</p>
       <p>You have {bestChampLosses.current} losses</p>
       <p>Your winrate is {bestChampWins.current / bestChampNumMatches.current * 100}%</p>
 
-      <h1>{playerWin.current}</h1>
+      <h1>Highlight game:</h1>
+      <h2>{playerWin.current}</h2>
       <h3>Match played on {(startTime.current)}</h3>
       <h3>Game duration {(gameLength.current)}</h3>
 
@@ -463,10 +469,10 @@ function App() {
         
         <div id="midspacer"></div>
         <div className='side'> 
-          <SideChamp name={otherChamps.current[1].name} place="2nd" id="2"></SideChamp>
-          <SideChamp name={otherChamps.current[2].name} place="3rd" id="3"></SideChamp>
-          <SideChamp name={otherChamps.current[3].name} place="4th" id="4"></SideChamp>
-          <SideChamp name={otherChamps.current[4].name} place="5th" id="5"></SideChamp>
+
+        {otherChamps.current.map((item,index)=>{
+         return <SideChamp name={otherChamps.current[index].name} place={(bestScore.current[index + 1] * 100).toFixed(0) + "%"}></SideChamp>
+          })}
         </div>
         <div id="midspacer"></div>
 

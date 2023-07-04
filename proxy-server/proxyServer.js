@@ -50,8 +50,8 @@ app.get('/playerRank', async (req, res) => {
 //Get list of matches and details
 app.get('/matchHistory', async (req, res) => {
     const puuid = await getPlayerPUUID(req.query.username);
-    const numberOfGames = 10;
-    const link1 = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=" + numberOfGames + "&api_key=" + API_KEY;
+    const numberOfGames = 15;
+    const link1 = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=" + numberOfGames + "&api_key=" + API_KEY + "&queue=420";
     const matchIDList = await axios.get(link1)
         .then(response => response.data)
         .catch(err => err);
@@ -61,7 +61,9 @@ app.get('/matchHistory', async (req, res) => {
         const link2 = "https://americas.api.riotgames.com/lol/match/v5/matches/" + matchIDList[i] + "?api_key=" + API_KEY;
         const details = await axios.get(link2)
             .then(response => response.data)
-            .catch(err => err);
+            .catch(err => {
+                console.log(err)
+            });
             matchListDetails.push(details);
     }
 
