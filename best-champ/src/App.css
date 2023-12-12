@@ -56,7 +56,6 @@
 
 .flex-container {
   display: flex;
-  justify-content: center;
   width: 100%;
   margin-top: 1%;
 }
@@ -70,47 +69,49 @@
 
 .middle {
   display: flex;
-  width: 56%;
-  height: 200%;
-  flex-direction: column;
-  text-align: left;
+  width: 100%;
+}
+
+.mid {
+  width: 100%;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  align-items: center;
+  justify-content: center;
+  scrollbar-width: none;
+}
+
+.content::-webkit-scrollbar {
+  width: 0;
 }
 
 .scrollable-box {
   display: flex;
-  width: 20%;
-  flex-direction: column;
+  width: 25%;
+  height: 100vh;
   text-align: left;
   overflow: auto;
-  height: 95vh;
-  position: relative;
-  overflow: hidden;
-}
-
-.scrollable-box .content {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
+  align-items: center;
+  justify-content: center;
   background-color: #e7d5bcbe; 
   border: 1px solid #ccc; 
   border-radius: 5px; 
   padding: 10px; 
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   font-family: 'Arial', sans-serif; 
   color: #333; 
 }
 
-/* Hide the scrollbar */
-.scrollable-box .content::-webkit-scrollbar {
+.scrollable-box ::-webkit-scrollbar {
   background: transparent;
 }
 
-
-/* Show the pseudo-element on hover to indicate scrollability */
-.scrollable-box .content:hover::after {
+.scrollable-box :hover::after {
   opacity: 0;
 }
-
 
 #midspacer {
   display: flex;
@@ -188,14 +189,15 @@
 
 #sideChamp-container {
   margin-bottom: 5%;
-  height: 30%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   position: relative;
-  transform: translateX(-1%);
-  flex-direction: column;
+  background-color: rgba(177, 172, 168, 0.9);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
 }
 
 #sidechampimg {
@@ -244,6 +246,6 @@
 }
 
 .rounded-corner:hover {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
 }
 

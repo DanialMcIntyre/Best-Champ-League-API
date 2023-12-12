@@ -17,6 +17,7 @@ function App() {
   //List of matches with details
   var [matchData, setMatchData] = useState({})
 
+
   //Data from matches
   const number = React.useRef([]) //Player index in match list
   const champions = React.useRef([])
@@ -448,7 +449,7 @@ function App() {
 
   function SideChamp(props) {
     return (
-      <div className='rounded-corner' id="sideChamp-container">
+      <div id="sideChamp-container">
         <div id="place">{props.place}</div>
         <img src={"http://ddragon.leagueoflegends.com/cdn/13.13.1/img/champion/" + props.name + ".png"} alt="Your second best" id="sidechampimg" display="flex"/>
         <div>{props.name}</div>
@@ -472,16 +473,20 @@ function App() {
           <div id="image-container"><img src={imgString} alt="Your best champion" id="champImg" /></div>
         </div>
         <div id="midspacer"></div>
+
         <div className='middle'>
-          <MainStat></MainStat>
-        </div>
-        
-        <div id="midspacer"></div>
-        <div class="scrollable-box">
-          <div class="content">
-            {otherChamps.current.map((item,index)=>{
-          return <SideChamp name={otherChamps.current[index].name} place={(bestScore.current[index + 1] * 100).toFixed(0) + "%"} games={otherChamps.current[index].games} wins={otherChamps.current[index].wins}></SideChamp>
-            })}
+
+          <div class="mid">
+            <MainStat></MainStat>
+          </div>
+
+          <div id="midspacer"></div>
+          <div className="scrollable-box">
+            <div className="content">
+              {otherChamps.current.map((item,index)=>{
+            return <SideChamp name={otherChamps.current[index].name} place={(bestScore.current[index + 1] * 100).toFixed(0) + "%"} games={otherChamps.current[index].games} wins={otherChamps.current[index].wins}></SideChamp>
+              })}
+            </div>
           </div>
         </div>
         
@@ -503,7 +508,7 @@ function App() {
               <input type="text" className="search" onChange = {e => setSearchText(e.target.value)} onKeyDown = {e => handleKeyDown(e)}/>
               <button className="button"onClick = {e => onButtonClick(e)}>Search for player</button>
               <p className="labelGames">Number of games</p>
-              <input type="number" className="number-input" defaultValue={20} placeholder={20} value={numGames} onChange={(e) => setNumGames(parseInt(e.target.value))} min={10} max= {50}/>
+              <input type="number" className="number-input" placeholder={20} value={numGames} onChange={(e) => setNumGames(parseInt(e.target.value))} min={10} max= {50}/>
               </div>
             <div>
               {
