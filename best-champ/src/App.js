@@ -8,6 +8,7 @@ function App() {
 
   //Text box
   const [searchText, setSearchText] = useState("");
+  const [numGames, setNumGames] = useState("");
 
   //Player data
   var [playerData, setPlayerData] = useState({})
@@ -80,7 +81,7 @@ function App() {
 
   //Gets match details of past games
   async function getMatchData() {
-    axios.get("http://localhost:4000/matchHistory", { params: {username: searchText}})
+    axios.get("http://localhost:4000/matchHistory", { params: {username: searchText, num: numGames}})
       .then(function (response) {
         setMatchData(response.data);
       }).catch(function (error) {
@@ -106,6 +107,7 @@ function App() {
       let playerVision = [];
 
       //Find player position in list of players (ex: 3 of 10)
+      console.log(matchData)
       for (let i = 0; i < numOfMatches; i++) {
         for (let n = 0; n < 10; n++) {
           if (matchData[i].metadata.participants[n] === puuid) {
@@ -224,6 +226,8 @@ function App() {
         value[1] = newValue[1];
         if(win.current[i]) {
           value[2] = newValue[2] + 1
+        } else {
+          value[2] = newValue[2]
         }
         dict[champions.current[i]] = value;
       } else {
@@ -255,7 +259,7 @@ function App() {
         bestChamp.current = currentChamp;
       }
       otherChamps.current[count] = {name: currentChamp, score: value[0], games: value[1], wins: value[2]}
-      bestScore.current[count] = (Math.round(value[0] / 50 * 100) / 100)
+      bestScore.current[count] = (Math.round(value[0]) / 100).toFixed(2)
       count++;
     }
     otherChamps.current.sort(function(a,b) {
@@ -345,7 +349,6 @@ function App() {
 
   //Runs on every page re-render
   useEffect(() => {
-    console.log(matchData);
     }, [playerData, playerRank, matchData]); 
 
   getPlayerDataFromMatches()
@@ -399,11 +402,9 @@ function App() {
     return (
     <div className='rounded-corner'>
 
-      <p>Your Best Champion Is: {bestChamp.current}</p>
-      <p>Your Best Score Is: {bestScore.current[0] * 100}%</p>
-      <p>You have {bestChampWins.current} wins</p>
-      <p>You have {bestChampLosses.current} losses</p>
-      <p>Your winrate is {bestChampWins.current / bestChampNumMatches.current * 100}%</p>
+      <h1>Your Best Champion Is: {bestChamp.current}</h1>
+      <h2>Your Best Score Is: {(bestScore.current[0] * 100).toFixed(0)}%</h2>
+      <p>You have {bestChampWins.current} wins and {bestChampLosses.current} losses with a {(bestChampWins.current / bestChampNumMatches.current * 100).toFixed(2)}% winrate</p>
 
       <h1>Highlight game:</h1>
       <h2>{playerWin.current}</h2>
@@ -452,11 +453,9 @@ function App() {
         <img src={"http://ddragon.leagueoflegends.com/cdn/13.13.1/img/champion/" + props.name + ".png"} alt="Your second best" id="sidechampimg" display="flex"/>
         <div>{props.name}</div>
         <div id="infobox">
-          {
-            console.log(props.name + " wins: " + props.wins)
-          }
-          <div>{props.wins/props.games*100}% Winrate ({props.games} Games)</div>
-          <div> Average Kills: </div>
+          <div>{(props.wins/props.games*100).toFixed(2)}% Winrate ({props.games} Games)</div>
+          <div>Number of games: {props.games}</div>
+          <div>Number of wins: {props.wins}</div>
           </div>
       </div>
     )
@@ -485,7 +484,6 @@ function App() {
             })}
           </div>
         </div>
-
         
         <div id="midspacer"></div>
 
@@ -501,10 +499,12 @@ function App() {
             <div className = "title">
               <h1>Best Champion Finder!</h1>
             </div>
-
-            <input type="text" onChange = {e => setSearchText(e.target.value)} onKeyDown = {e => handleKeyDown(e)}/>
-            <button onClick = {e => onButtonClick(e)}>Search for player</button>
-            
+            <div className="userInput">
+              <input type="text" className="search" onChange = {e => setSearchText(e.target.value)} onKeyDown = {e => handleKeyDown(e)}/>
+              <button className="button"onClick = {e => onButtonClick(e)}>Search for player</button>
+              <p className="labelGames">Number of games</p>
+              <input type="number" className="number-input" defaultValue={20} placeholder={20} value={numGames} onChange={(e) => setNumGames(parseInt(e.target.value))} min={10} max= {50}/>
+              </div>
             <div>
               {
               JSON.stringify(playerData.status) === "404" ?
