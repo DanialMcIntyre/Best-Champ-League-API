@@ -10,7 +10,7 @@ body {
 @font-face {
   font-family: "FrizQuadrataRegular";
   src: local("FrizQuadrataRegular"),
-   url("./fonts/FrizQuadrataRegular.ttf") format("truetype");
+   url("../fonts/FrizQuadrataRegular.ttf") format("truetype");
   font-weight: bold;
  }
 

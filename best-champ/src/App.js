@@ -1,4 +1,4 @@
-import './App.css';
+import './style/App.css';
 import {useState} from 'react'
 import axios from 'axios';
 import * as React from 'react';
@@ -16,7 +16,6 @@ function App() {
   var [playerRank, setPlayerRank] = useState({})
   //List of matches with details
   var [matchData, setMatchData] = useState({})
-
 
   //Data from matches
   const number = React.useRef([]) //Player index in match list
@@ -358,8 +357,6 @@ function App() {
   highlightGame();
 
   //Puts info into variables
-  //var playerID = playerData.id
-  //var playerPUUID = playerData.puuid
   var playerName = playerData.name
   var pRank;
   var wRatio;
@@ -380,6 +377,7 @@ function App() {
   var skinNumber = 0;
   let iconString = "http://ddragon.leagueoflegends.com/cdn/13.11.1/img/profileicon/" + iconID + ".png"
   let imgString = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/" + bestChamp.current + "_" + skinNumber + ".jpg"
+  
   function handleKeyDown(event) {
     if (event.key === 'Enter') {
       onButtonClick(event);
@@ -530,7 +528,8 @@ function App() {
               <>
               <br/>
               <h1>No player data</h1>
-              </>}
+              </>
+              }
             </div>
             <br />
           </div>

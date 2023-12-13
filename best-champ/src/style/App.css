@@ -3,7 +3,7 @@
   text-align: center;
   height: 100vh;
   overflow-y: auto;
-  background-image: url(./images/background.jpg);
+  background-image: url(../images/background.jpg);
   background-size: cover;
 }
 
