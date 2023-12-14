@@ -85,7 +85,6 @@ app.get('/matchHistory', async (req, res) => {
     if (matchIDList.length === 0) {
         return res.status(600).send("No matches found!");
     }
-    console.log(matchIDList.length)
     let matchListDetails = []
     for (let i = 0; i < matchIDList.length; i++) {
         const link2 = "https://americas.api.riotgames.com/lol/match/v5/matches/" + matchIDList[i] + "?api_key=" + API_KEY;
