@@ -9,27 +9,14 @@ app.use(cors());
 
 const API_KEY = process.env.API_KEY;
 
-//Gets player puuid
-function getPlayerPUUID(playerName) {
-
+//Gets player data
+function getPlayerData(playerName) {
     const link = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + playerName + "?api_key=" + API_KEY;  
     return axios.get(link)
         .then(response => {
-            return response.data.puuid;
+            return response;
         }).catch(err => {
-            console.log(err);
-            return err;
-        });
-}
-
-function getSummonerID(playerName) {
-    const link = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + playerName + "?api_key=" + API_KEY;  
-    return axios.get(link)
-        .then(response => {
-            return response.data.id;
-        }).catch(err => {
-            console.log(err);
-            return err;
+            return err.response;
         });
 }
 
@@ -37,79 +24,86 @@ function getSummonerID(playerName) {
 app.get('/playerData', async (req, res) => {
     const searchName = req.query.username;
     const link = "https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/" + searchName + "?api_key=" + API_KEY;  
-    const playerData = await axios.get(link)
-        .then(response => response.data)
+    await axios.get(link)
+        .then(response => {
+            return res.json(response.data)
+        })
         .catch(err => {
-            console.log(err);
             const status = err.response.status
             if(status === 429) {
-                res.status(status).send("Rate limit reached!");
+                return res.status(status).send("Rate limit reached!");
             } else {
-                res.status(status).send("API Call error");
+                console.log("1: " + status);
+                return res.status(status).send("API Call error. Status code: " + status);
             }
         });
-    
-    res.json(playerData);
 })
 
 app.get('/playerRank', async (req, res) => {
-    const id = await getSummonerID(req.query.username);
+    const player = await getPlayerData(req.query.username);
+    if (player.status === 404) {
+        return res.status(player.status).send("Player doesn't exist!")
+    }
+    const id = player.data.id;
     const link = "https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/" + id + "?api_key=" + API_KEY;  
-    const playerRank = await axios.get(link)
-        .then(response => response.data)
+    await axios.get(link)
+        .then(response => {
+            return res.json(response.data);
+        })
         .catch(err => {
-            console.log(err);
             const status = err.response.status
             if(status === 429) {
-                res.status(status).send("Rate limit reached!");
+                return res.status(status).send("Rate limit reached!");
             } else {
-                res.status(status).send("API Call error");
+                console.log("2: " + status);
+                return res.status(status).send("API Call error. Status code: " + status);
             }
         });
-    res.json(playerRank);
 })
 
 //Get list of matches and details
 app.get('/matchHistory', async (req, res) => {
-    const puuid = await getPlayerPUUID(req.query.username);
-    if (puuid === undefined) {
-        res.status(puuid.response.status).send("API Call error")
+    const player = await getPlayerData(req.query.username);
+    if (player.status === 404) {
+        return res.status(player.status).send("Player doesn't exist!")
     }
+    const puuid = player.data.puuid;
     const numberOfGames = req.query.num;
     const link1 = "https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + puuid + "/ids?start=0&count=" + numberOfGames + "&api_key=" + API_KEY + "&queue=420";
     const matchIDList = await axios.get(link1)
         .then(response => response.data)
         .catch(err => {
-            console.log(err);
-            const status = err.response.status
+            const status = err.response.status;
             if(status === 429) {
-                res.status(status).send("Rate limit reached!");
+                return res.status(status).send("Rate limit reached!");
             } else {
-                res.status(status).send("API Call error");
+                console.log("3: " + status);
+                return res.status(status).send("API Call error. Status code: " + status);
             }
         });
 
     if (matchIDList.length === 0) {
-        res.status(600).send("No matches found!");
+        return res.status(600).send("No matches found!");
     }
+    console.log(matchIDList.length)
     let matchListDetails = []
     for (let i = 0; i < matchIDList.length; i++) {
         const link2 = "https://americas.api.riotgames.com/lol/match/v5/matches/" + matchIDList[i] + "?api_key=" + API_KEY;
-        const details = await axios.get(link2)
-            .then(response => response.data)
+        await axios.get(link2)
+            .then(response => { 
+                matchListDetails.push(response.data);
+            })
             .catch(err => {
-                console.log(err)
-                const status = err.response.status
+                const status = err.response.status;
                 if(status === 429) {
-                    res.status(status).send("Rate limit reached!");
+                    return res.status(status).send("Rate limit reached!");
                 } else {
-                    res.status(status).send("API Call error");
+                    console.log("4: " + status);
+                    return res.status(status).send("API Call error. Status code: " + status);
                 }
             });
-            matchListDetails.push(details);
     }
-
-    res.json(matchListDetails);
+    return res.json(matchListDetails);
 });
 
 app.listen(4000, function () {

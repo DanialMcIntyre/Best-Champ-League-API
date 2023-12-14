@@ -14,5 +14,5 @@ In the project directory, run the following command:
 
 ### `npm start`
 
-This will run the app, as well as the proxy server
+This will run the app, as well as the proxy server. 
 Open [http://localhost:3000] to view it in your browser.

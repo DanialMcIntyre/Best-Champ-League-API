@@ -18,6 +18,7 @@ function App() {
   var [matchData, setMatchData] = useState({})
   //Status
   var [resStatus, setResStatus] = useState(0)
+  var [matchStatus, setMatchStatus] = useState(0)
 
   //Data from matches
   const number = React.useRef([]) //Player index in match list
@@ -58,6 +59,7 @@ function App() {
     setMatchData([])
     setPlayerRank([])
     setResStatus(0)
+    setMatchStatus(0)
     getPlayerData()
     getPlayerRank()
     getMatchData()
@@ -88,13 +90,15 @@ function App() {
 
   //Gets match details of past games
   async function getMatchData() {
-    axios.get("http://localhost:4000/matchHistory", { params: {username: searchText, num: numGames}})
+    axios.get("http://localhost:4000/matchHistory", { params: {username: searchText, num: numGames} })
       .then(function (response) {
-        setResStatus(response.status);
-        setMatchData(response.data);
+        setMatchStatus(response.status);
+        if (response.status === 200) {
+          setMatchData(response.data);
+        }
       }).catch(function (error) {
-        setResStatus(error.response.status);
-        console.log(error);
+        setMatchStatus(error.response.status);
+        console.log(error.response.status);
       })
   }
 
@@ -357,10 +361,9 @@ function App() {
 
   //Runs on every page re-render
   useEffect(() => {
-    console.log(resStatus);
-    }, [playerData, playerRank, matchData, resStatus]); 
+    }, [playerData, playerRank, matchData, resStatus, matchStatus]); 
 
-  getPlayerDataFromMatches()
+  getPlayerDataFromMatches();
   findBestChamp();
   bestChampStats();
   highlightGame();
@@ -413,6 +416,7 @@ function App() {
       <h1>Your Best Champion Is: {bestChamp.current}</h1>
       <h2>Your Best Score Is: {(bestScore.current[0] * 100).toFixed(0)}%</h2>
       <p>You have {bestChampWins.current} wins and {bestChampLosses.current} losses with a {(bestChampWins.current / bestChampNumMatches.current * 100).toFixed(2)}% winrate</p>
+      <p>Games queried: {matchData.length}</p>
 
       <h1>Highlight game:</h1>
       <h2>{playerWin.current}</h2>
@@ -508,7 +512,7 @@ function App() {
       <div className="App">
         <div className="content">
           <div className="top">
-            <div className = "title">
+            <div className="title">
               <h1>Best Champion Finder!</h1>
             </div>
             <div className="userInput">
@@ -523,31 +527,43 @@ function App() {
           JSON.stringify(bestChamp.current) !== undefined ?
           <Analytics/>
           : //IF rate limit was reached
-          JSON.stringify(resStatus) === "429" ?
+          resStatus === 429 || matchStatus === 429?
           <div className="error">
             <h1>Rate limit reached. Please try again later.</h1>
           </div>
-          :
-          resStatus === 600 ?
+          : //No matches found
+          matchStatus === 600 ?
           <div className="error">
             <h1>No matches found!</h1>
           </div>    
-          : //Other error
-          resStatus !== 200 && resStatus !== 0 ?
+          : //Player not found
+          resStatus === 404 ?
+          <>
           <div className="error">
-            <h1>API Call Error. Failed with status code {resStatus}. Try another username!</h1>
+            <h1>Player not found. Please enter a valid summoner! </h1>
+          </div>
+          </> 
+          : //Other error
+          (resStatus !== 200 && resStatus !== 0) ||  (matchStatus !== 200 && matchStatus !== 0) ?
+          <div className="error">
+            <h1>API Call Error. Failed with Res code: {resStatus}, and Match code: {matchStatus}. Try another username!</h1>
           </div>
           : //When searching the API
-          JSON.stringify(playerData) !== '{}' ?
+          JSON.stringify(playerData) !== '{}'?
           <>
           <br/>
-          <h1>Loading...</h1>
+          <div className="top">
+            <h1>Loading...</h1>
+          </div>
+          <br/>
           <img src={require('./images/loading.gif')} alt="loading..." />
           </>
           : //Else
           <>
           <br/>
-          <h1>No player data</h1>
+          <div className="top">
+            <h1>No player data</h1>
+          </div>
           </>
           }
         </div>
