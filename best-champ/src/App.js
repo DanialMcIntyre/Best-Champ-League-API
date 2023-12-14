@@ -16,6 +16,8 @@ function App() {
   var [playerRank, setPlayerRank] = useState({})
   //List of matches with details
   var [matchData, setMatchData] = useState({})
+  //Status
+  var [resStatus, setResStatus] = useState(0)
 
   //Data from matches
   const number = React.useRef([]) //Player index in match list
@@ -55,6 +57,7 @@ function App() {
     setPlayerData([])
     setMatchData([])
     setPlayerRank([])
+    setResStatus(0)
     getPlayerData()
     getPlayerRank()
     getMatchData()
@@ -64,8 +67,10 @@ function App() {
   function getPlayerData() {
     axios.get("http://localhost:4000/playerData", { params: {username: searchText}})
     .then(function (response) {
+      setResStatus(response.status);
       setPlayerData(response.data);
     }).catch(function (error) {
+      setResStatus(error.response.status);
       console.log(error);
     })
   }
@@ -73,8 +78,10 @@ function App() {
   function getPlayerRank() {
     axios.get("http://localhost:4000/playerRank", { params: {username: searchText}})
     .then(function (response) {
+      setResStatus(response.status);
       setPlayerRank(response.data);
     }).catch(function (error) {
+      setResStatus(error.response.status);
       console.log(error);
     })
   }
@@ -83,8 +90,10 @@ function App() {
   async function getMatchData() {
     axios.get("http://localhost:4000/matchHistory", { params: {username: searchText, num: numGames}})
       .then(function (response) {
+        setResStatus(response.status);
         setMatchData(response.data);
       }).catch(function (error) {
+        setResStatus(error.response.status);
         console.log(error);
       })
   }
@@ -107,7 +116,6 @@ function App() {
       let playerVision = [];
 
       //Find player position in list of players (ex: 3 of 10)
-      console.log(matchData)
       for (let i = 0; i < numOfMatches; i++) {
         for (let n = 0; n < 10; n++) {
           if (matchData[i].metadata.participants[n] === puuid) {
@@ -349,7 +357,8 @@ function App() {
 
   //Runs on every page re-render
   useEffect(() => {
-    }, [playerData, playerRank, matchData]); 
+    console.log(resStatus);
+    }, [playerData, playerRank, matchData, resStatus]); 
 
   getPlayerDataFromMatches()
   findBestChamp();
@@ -474,7 +483,7 @@ function App() {
 
         <div className='middle'>
 
-          <div class="mid">
+          <div className="mid">
             <MainStat></MainStat>
           </div>
 
@@ -482,7 +491,7 @@ function App() {
           <div className="scrollable-box">
             <div className="content">
               {otherChamps.current.map((item,index)=>{
-            return <SideChamp name={otherChamps.current[index].name} place={(bestScore.current[index + 1] * 100).toFixed(0) + "%"} games={otherChamps.current[index].games} wins={otherChamps.current[index].wins}></SideChamp>
+            return <SideChamp key={index} name={otherChamps.current[index].name} place={(bestScore.current[index + 1] * 100).toFixed(0) + "%"} games={otherChamps.current[index].games} wins={otherChamps.current[index].wins}></SideChamp>
               })}
             </div>
           </div>
@@ -498,7 +507,7 @@ function App() {
     <div>
       <div className="App">
         <div className="content">
-          <div className = "font-face-league">
+          <div className="top">
             <div className = "title">
               <h1>Best Champion Finder!</h1>
             </div>
@@ -507,33 +516,42 @@ function App() {
               <button className="button"onClick = {e => onButtonClick(e)}>Search for player</button>
               <p className="labelGames">Number of games</p>
               <input type="number" className="number-input" placeholder={20} value={numGames} onChange={(e) => setNumGames(parseInt(e.target.value))} min={10} max= {50}/>
-              </div>
-            <div>
-              {
-              JSON.stringify(playerData.status) === "404" ?
-              <>
-              <p>Please enter a valid username!</p>
-              </>
-              :
-              JSON.stringify(bestChamp.current) !== undefined ?
-              <Analytics/>
-              :
-              JSON.stringify(playerData) !== '{}' ?
-              <>
-              <br/>
-              <h1>Loading...</h1>
-              <img src={require('./images/loading.gif')} alt="loading..." />
-              </>
-              :
-              <>
-              <br/>
-              <h1>No player data</h1>
-              </>
-              }
             </div>
-            <br />
           </div>
+          {
+          //If search was successful
+          JSON.stringify(bestChamp.current) !== undefined ?
+          <Analytics/>
+          : //IF rate limit was reached
+          JSON.stringify(resStatus) === "429" ?
+          <div className="error">
+            <h1>Rate limit reached. Please try again later.</h1>
+          </div>
+          :
+          resStatus === 600 ?
+          <div className="error">
+            <h1>No matches found!</h1>
+          </div>    
+          : //Other error
+          resStatus !== 200 && resStatus !== 0 ?
+          <div className="error">
+            <h1>API Call Error. Failed with status code {resStatus}. Try another username!</h1>
+          </div>
+          : //When searching the API
+          JSON.stringify(playerData) !== '{}' ?
+          <>
+          <br/>
+          <h1>Loading...</h1>
+          <img src={require('./images/loading.gif')} alt="loading..." />
+          </>
+          : //Else
+          <>
+          <br/>
+          <h1>No player data</h1>
+          </>
+          }
         </div>
+        <br />
       </div>
     </div>
   );
