@@ -543,6 +543,11 @@ function App() {
             <h1>Player not found. Please enter a valid summoner! </h1>
           </div>
           </> 
+          : //No API Key
+          resStatus === 403 && matchStatus === 403 ?
+          <div className="error">
+            <h1>No API key found. Please provide a key in a .env folder!</h1>
+          </div>
           : //Other error
           (resStatus !== 200 && resStatus !== 0) ||  (matchStatus !== 200 && matchStatus !== 0) ?
           <div className="error">
